@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6204fec1a788f94d8461dd31b966cd7, type: 3}
+  m_Name: New Random Marine Insurance Case Definition
+  m_EditorClassIdentifier: Assembly-CSharp::RandomMarineInsuranceCaseDefinition
+  insuranceTypePool:
+  - {fileID: 11400000, guid: 0996ec673baf4d54c8bda7cc1347ee05, type: 2}
+  caseGoal:
+    mode: 0
+    applySafeValuesForOtherReasons: 1
+    targetRejectionReasonIds: []
+    targetRejectionReasons:
+    - {fileID: 0}
+  validationAttempts: 8
+  textResolver:
+    useLocalization: 1
+    namesTable: MarineNames
+    documentsTable: MarineDocuments
+    formatsTable: MarineFormats
+    shipNameCount: 6
+    ownerNameCount: 6
+    captainNameCount: 6
+    portNameCount: 6
+  minimumPremium: 1000
+  maximumPremium: 5000
+  minimumCompensationAmount: 10000
+  maximumCompensationAmount: 50000
+  dataPool:
+  - key: 
+    value:
+      mode: 0
+      directValue: 
+      poolValues: []
+    codeValue:
+      mode: 0
+      directValue: 
+      poolValues: []
+  - key: 
+    value:
+      mode: 0
+      directValue: 
+      poolValues: []
+    codeValue:
+      mode: 0
+      directValue: 
+      poolValues: []
+  spriteDataPool:
+  - key: 
+    value:
+      mode: 0
+      directValue: {fileID: 0}
+      poolValues: []

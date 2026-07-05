@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b1375ca5fc7def42acb2490dcefe33c, type: 3}
+  m_Name: 1-1Insurance
+  m_EditorClassIdentifier: Assembly-CSharp::MarineInsuranceTypeDefinition
+  id: New Marine Insurance Type Definition
+  displayName: New Marine Insurance Type Definition
+  iconSprite: {fileID: 0}
+  description: 
+  insuranceTypeName: 1
+  documentPrefabs:
+  - {fileID: 222386689040900033, guid: cfcd26aab1b0a5546bff9354ca891958, type: 3}
+  - {fileID: 222386689040900033, guid: ec0fd208461b3ea42bc6b1746a9fa398, type: 3}
+  rejectionReasons:
+  - {fileID: 11400000, guid: a457b7625f997254cb9cf0af416418ef, type: 2}
+  - {fileID: 11400000, guid: 8ae2b6fd580861d438bd29f064b36d3b, type: 2}
+  - {fileID: 11400000, guid: 75d3d9a957d240744afefc476cc6cbe9, type: 2}
+  - {fileID: 11400000, guid: fb5bb24979a451d44824f72f42b2ff2a, type: 2}
+  - {fileID: 11400000, guid: 843a3d42dbf56b84db1bfa7f808a61ca, type: 2}

@@ -1,0 +1,301 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c13433de43a04cbdafde299293c31813, type: 3}
+  m_Name: Isabel Costa Tutorial Sequence
+  m_EditorClassIdentifier: Assembly-CSharp::TimelineSequenceDefinition
+  steps:
+  - stepId: isabel_first_contract
+    stepType: 1
+    instruction: "자, 첫 계약이야."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_ship_owner
+    stepType: 1
+    instruction: "선박의 주인은 산타 루지아. 선박 보험을 신청하러 왔어."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_destination
+    stepType: 1
+    instruction: "도착항은 세투발."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_short_route
+    stepType: 1
+    instruction: "강을 따라 하루면 닿는 항로지."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_simple_case
+    stepType: 1
+    instruction: "복잡한 건 없어."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_try_yourself
+    stepType: 1
+    instruction: "내가 미리 훑어둔 계약이지만, 네가 직접 해봐."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_look_right
+    stepType: 1
+    instruction: "오른쪽을 봐."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: highlight_absolute_reject_panel
+    stepType: 2
+    instruction: 
+    targetId: absoluteRejectPanel
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_absolute_reject
+    stepType: 1
+    instruction: "위는 절대 거절 조건이야."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_check_and_reject
+    stepType: 1
+    instruction: "하나라도 맞으면 체크하고 거절해."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: clear_absolute_reject_panel
+    stepType: 3
+    instruction: 
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 1
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: highlight_consider_reject_panel
+    stepType: 2
+    instruction: 
+    targetId: considerRejectPanel
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_consider_reject
+    stepType: 1
+    instruction: "아래는 거절 고려 조건."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_consider_warning
+    stepType: 1
+    instruction: "해당한다고 바로 거절하는 건 아니지만, 어쨌든 위험 요소라는 걸 명심해. 거절의 근거가 될 순 있으니까."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_check_both_rules
+    stepType: 1
+    instruction: "두 기준을 먼저 확인하고, 해당이 되는지 보자."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: clear_consider_reject_panel
+    stepType: 3
+    instruction: 
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 1
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_decide
+    stepType: 1
+    instruction: "그다음 승인할지, 거절할지 정하면 돼."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_documents
+    stepType: 1
+    instruction: "이번에는 청약서와 등록증만 보면 된다."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_check_names
+    stepType: 1
+    instruction: "선박명과 선주명에 이상이 없는 지 확인해. 이건 중요한 문제야."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_trust
+    stepType: 1
+    instruction: "보험에서 가장 중요한 건 신용이다. 이런 사소한 정보부터 어긋난다면 절대 거절 사유다."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_registration_expiry
+    stepType: 1
+    instruction: "등록증의 유효 기한도 꼭 보고. 기한이 지난 선박이면 보험은 물론 출항 자체도 불가야."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepId: isabel_approve_clean_case
+    stepType: 1
+    instruction: "이상이 없는 깨끗한 계약이라 판단되면, 승인을 누르자."
+    targetId: 
+    allowedActionIds: []
+    completeWhenAllowedActionPerformed: 1
+    completeImmediately: 0
+    stepStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    stepCompleted:
+      m_PersistentCalls:
+        m_Calls: []

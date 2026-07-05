@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ff5b04c1494c746a3463e484b1f01c, type: 3}
+  m_Name: 1-1Dialogue
+  m_EditorClassIdentifier: Assembly-CSharp::ContractorDialogueProfile
+  localizedTextResolver:
+    useLocalization: 1
+    dialogueTable: Dialogue
+  greetingTemplates:
+  - contractor.greeting
+  greetingAdditionalSubmissionDocumentPrefab: {fileID: 0}
+  questIntroductionTemplates: []
+  truthPressureReactionTemplates: []
+  liePressureReactionTemplates: []
+  keyedResponses: []
+  timelineCues:
+  - lineKey: contractor.greeting.06
+    timing: 0
+    timelineAsset: {fileID: 11400000, guid: 84bd33665ebefbf4eb3fca1b5e90f5a8, type: 2}
+    waitForTimeline: 1
+  - lineKey: contractor.greeting.09
+    timing: 0
+    timelineAsset: {fileID: 11400000, guid: d3b7b46541e6d2044ac9e96fe94f4df0, type: 2}
+    waitForTimeline: 1

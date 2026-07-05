@@ -1,0 +1,237 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b5c05fbf793bdf4aaa24a864c3c060a, type: 3}
+  m_Name: 2-1Case
+  m_EditorClassIdentifier: Assembly-CSharp::FixedMarineInsuranceCaseDefinition
+  configuredCase:
+    npcName: "\uC544\uD3F0\uC218"
+    npcSprite: {fileID: 21300000, guid: e24ed78d9d0944c4b9395d244e291731, type: 3}
+    insuranceType: {fileID: 11400000, guid: 925b9fbf73f43354ca45ddbcb3fc11d9, type: 2}
+    dialogueProfile: {fileID: 11400000, guid: ea46d769fa53c3d4ea95844c38f1f72e, type: 2}
+    premium: 2400
+    compensationAmount: 120
+    contractDurationTurns: 3
+    accidentOccurrenceProbability: 0
+    patience: 2
+    monthEndDocumentPrefabs:
+    - {fileID: 2386872178788819344, guid: 999c096d3b870524e9712e1d301ef026, type: 3}
+    data:
+    - key: insuracne.submit
+      value:
+        mode: 0
+        directValue: Submitted
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: submitted
+        poolValues: []
+    - key: insurance.ship.name
+      value:
+        mode: 0
+        directValue: "\uC0C1 \uBBF8\uAC94"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: insurance.ship.owner.name
+      value:
+        mode: 0
+        directValue: "\uC544\uD3F0\uC218 \uB85C\uB4DC\uB9AC\uAC8C\uC2A4"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: insurance.captain.name
+      value:
+        mode: 0
+        directValue: "\uD1A0\uBA54 \uB4DC \uC18C\uC6B0\uC790"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: insurance.departure.date
+      value:
+        mode: 0
+        directValue: "1598\uB144 6\uC6D4 20\uC77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: registration.submit
+      value:
+        mode: 0
+        directValue: Submitted
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: submitted
+        poolValues: []
+    - key: registration.ship.name
+      value:
+        mode: 0
+        directValue: "\uC0C1 \uBBF8\uAC94"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: registration.ship.owner.name
+      value:
+        mode: 0
+        directValue: "\uC544\uD3F0\uC218 \uB85C\uB4DC\uB9AC\uAC8C\uC2A4"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: registration.ship.build.year
+      value:
+        mode: 0
+        directValue: "7\uB144 \uC804"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: registration.expiration.date
+      value:
+        mode: 0
+        directValue: "1599\uB144 6\uC6D4 30\uC77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: hull.submit
+      value:
+        mode: 0
+        directValue: Submitted
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: submitted
+        poolValues: []
+    - key: hull.inspection.result
+      value:
+        mode: 0
+        directValue: "\uD56D\uD574 \uAC00\uB2A5"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: hull.accident.history
+      value:
+        mode: 0
+        directValue: "\uCD5C\uADFC 12\uAC1C\uC6D4 \uC774\uB0B4 0\uD68C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: hull.repair.record
+      value:
+        mode: 0
+        directValue: "\uC5C6\uC74C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: route.submit
+      value:
+        mode: 0
+        directValue: Submitted
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: submitted
+        poolValues: []
+    - key: route.departure.date
+      value:
+        mode: 0
+        directValue: "1598\uB144 6\uC6D4 20\uC77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: route.departure.port
+      value:
+        mode: 0
+        directValue: "\uB9AC\uC2A4\uBCF8"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 1
+        poolValues: []
+    - key: route.destination.port
+      value:
+        mode: 0
+        directValue: "\uD47C\uC0EC, \uB9C8\uB370\uC774\uB77C \uC12C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 2
+        poolValues: []
+    - key: route.expected.return.date
+      value:
+        mode: 0
+        directValue: "1598\uB144 7\uC6D4 10\uC77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: route.weather.forecast
+      value:
+        mode: 0
+        directValue: "\uC591\uD638"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: hull.ship.name
+      value:
+        mode: 0
+        directValue: "\uC0C1 \uBBF8\uAC94"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: hull.damage.level
+      value:
+        mode: 0
+        directValue: 
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: none
+        poolValues: []
+    spriteData:
+    - key: ship.sprite
+      value:
+        mode: 0
+        directValue: {fileID: 4673024253835339421, guid: 3260c755049eaf24e94bba22f1626aee, type: 3}
+        poolValues: []
+    adventurers: []
+  editorCaseGoal:
+    mode: 0
+    applySafeValuesForOtherReasons: 1
+    targetRejectionReasonIds: []
+    targetRejectionReasons: []

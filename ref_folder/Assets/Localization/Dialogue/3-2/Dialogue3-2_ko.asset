@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Dialogue3-2_ko
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: ko
+  m_SharedData: {fileID: 11400000, guid: f401c72678321bf4182adf1ea8fc03f6, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 44562468864
+    m_Localized: "\uC548\uB155\uD558\uC138\uC694! \uC120\uC8FC\uB2D8 \uB300\uC2E0\uC5D0
+      \uC81C\uAC00 \uC654\uC5B4\uC694~"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 91320569856
+    m_Localized: "\uC2B9\uC778\uC785\uB2C8\uB2E4."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 114406019072
+    m_Localized: "\uAC10\uC0AC\uD569\uB2C8\uB2E4. \uC2E0\uB8B0\uC5D0 \uBCF4\uB2F5\uD558\uACA0\uC2B5\uB2C8\uB2E4."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 187617595392
+    m_Localized: "\uC870\uAC74\uBD80\uB85C \uBC1B\uACA0\uC2B5\uB2C8\uB2E4."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 181313556480
+    m_Localized: "\uC774 \uC815\uB3C4\uBA74 \uAC10\uC548\uD560 \uC218 \uC788\uC8E0!
+      \uC2E0\uB8B0\uC5D0 \uBCF4\uB2F5\uD558\uACA0\uC2B5\uB2C8\uB2E4."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 251446513664
+    m_Localized: "\uAC70\uC808\uC785\uB2C8\uB2E4."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 281184129024
+    m_Localized: "\uAE4C\uB2E4\uB86D\uB124\uC694\u2026 \uC774\uB807\uAC8C \uBABB
+      \uBBFF\uC5B4\uC11C\uC57C \uC81C\uB300\uB85C \uB41C \uC2E0\uC6A9 \uAC70\uB798\uB97C
+      \uD560 \uC218 \uC788\uACA0\uC2B5\uB2C8\uAE4C?"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

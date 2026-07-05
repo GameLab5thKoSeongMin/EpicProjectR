@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-String-Tables-Korean (ko)
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Localization-String-Tables-Korean (ko)
+  m_GUID: db442a9976b049d4d91ca4ef9978cb67
+  m_SerializeEntries:
+  - m_GUID: 1b6d95b3254d09641a3ff6fb744420b5
+    m_Address: Dialogue1-2_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 360d3893e8c5e424a8852889c852c4c3
+    m_Address: MarineDocuments_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5bc2600fc9f5fb14cb87a9847f3877ee
+    m_Address: Dialogue3-1_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d0404df5ce54b3438a49a9549d34995
+    m_Address: Dialogue3-2_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 73fd61a4d27a3344cb5623341360db4f
+    m_Address: MarineFormats_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 800393c1a78701a46a28a0c6299ca6ad
+    m_Address: Dialogue3-3_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f8c46c2b4e21994098231737222452f
+    m_Address: Dialogue2-1_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ffffb3c9ee2f67438b260d62ee04136
+    m_Address: Dialogue2-2_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8158d9ca08417e40b6f33f6f9636991
+    m_Address: MarineNames_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d4c27d0cf830fb74ab8b4cfc56a3b698
+    m_Address: Dialogue_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: 607cc7080fa75ef458c63a595bb94521, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: f853866874bda0a4f9fd2aca010e8ef9, type: 2}
+    - {fileID: 11400000, guid: 0f5d3e15a39a1f449bd3491979d49b8d, type: 2}

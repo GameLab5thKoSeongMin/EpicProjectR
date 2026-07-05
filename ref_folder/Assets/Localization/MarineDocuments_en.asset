@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: MarineDocuments_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 410c2d9dbea17434a91dd5581ab9cb83, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 333533184
+    m_Localized: Submitted
+    m_Metadata:
+      m_Items: []
+  - m_Id: 362893312
+    m_Localized: Seaworthy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 362893313
+    m_Localized: Failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 362893314
+    m_Localized: Good
+    m_Metadata:
+      m_Items: []
+  - m_Id: 362893315
+    m_Localized: Normal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 362893316
+    m_Localized: Severe weather (strong wind)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 362893317
+    m_Localized: Severe weather (high waves)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 362893318
+    m_Localized: Severe weather (dense sea fog)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 362893319
+    m_Localized: Severe weather (storm zone)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 362893320
+    m_Localized: Exists
+    m_Metadata:
+      m_Items: []
+  - m_Id: 362893321
+    m_Localized: None
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

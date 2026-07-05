@@ -1,0 +1,104 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Dialogue Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: Dialogue
+  m_TableCollectionNameGuidString: e7034a1d06447604d9a19f4a8c5b13c1
+  m_Entries:
+  - m_Id: 534859776
+    m_Key: contractor.greeting.00.npc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 572608512
+    m_Key: contractor.greeting.01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 576802822
+    m_Key: contractor.greeting.02.npc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 384724499517440
+    m_Key: contractor.greeting.03.npc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 384798810001408
+    m_Key: contractor.greeting.04
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385031384158208
+    m_Key: contractor.greeting.05
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385079849340928
+    m_Key: contractor.greeting.06
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385133469323264
+    m_Key: contractor.greeting.07
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385136770240512
+    m_Key: contractor.greeting.08
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385140012437504
+    m_Key: contractor.greeting.09
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385081480925184
+    m_Key: contractor.greeting.10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385083108315136
+    m_Key: contractor.greeting.11
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385121012240384
+    m_Key: contractor.greeting.12
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385123281358848
+    m_Key: contractor.greeting.13
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385125525311488
+    m_Key: contractor.greeting.14
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385127530188800
+    m_Key: contractor.greeting.15
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385129547649024
+    m_Key: contractor.greeting.16
+    m_Metadata:
+      m_Items: []
+  - m_Id: 385131548332032
+    m_Key: contractor.greeting.17
+    m_Metadata:
+      m_Items: []
+  - m_Id: 551182567297024
+    m_Key: contractor.greeting.18
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 5991168035601252426
+  references:
+    version: 2
+    RefIds:
+    - rid: 5991168035601252426
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1782642674987

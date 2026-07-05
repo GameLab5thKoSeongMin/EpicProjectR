@@ -1,0 +1,228 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b5c05fbf793bdf4aaa24a864c3c060a, type: 3}
+  m_Name: 2-2Case
+  m_EditorClassIdentifier: Assembly-CSharp::FixedMarineInsuranceCaseDefinition
+  configuredCase:
+    npcName: "\uAC00\uC2A4\uD30C\uB974"
+    npcSprite: {fileID: 21300000, guid: e24ed78d9d0944c4b9395d244e291731, type: 3}
+    insuranceType: {fileID: 11400000, guid: c75e313d3c379c045bbab44a8bc953b7, type: 2}
+    dialogueProfile: {fileID: 11400000, guid: 9c131fa4048b4224ba5f98e51dac4215, type: 2}
+    premium: 3000
+    compensationAmount: 150
+    accidentOccurrenceProbability: 1
+    patience: 2
+    monthEndDocumentPrefabs:
+    - {fileID: 2386872178788819344, guid: 583430911e102f04e806f594ac8d72f7, type: 3}
+    data:
+    - key: insuracne.submit
+      value:
+        mode: 0
+        directValue: Submitted
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: submitted
+        poolValues: []
+    - key: insurance.ship.name
+      value:
+        mode: 0
+        directValue: "\uC0B0\uD0C0 \uB9C8\uB974\uD0C0"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: insurance.ship.owner.name
+      value:
+        mode: 0
+        directValue: "\uAC00\uC2A4\uD30C\uB974 \uCF54\uC5D8\uB958"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: insurance.captain.name
+      value:
+        mode: 0
+        directValue: "\uB450\uC544\uB974\uD2B8 \uB85C\uD504\uC2A4"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: insurance.departure.date
+      value:
+        mode: 0
+        directValue: "1598\uB144 6\uC6D4 22\uC77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: registration.submit
+      value:
+        mode: 0
+        directValue: Submitted
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: submitted
+        poolValues: []
+    - key: registration.ship.name
+      value:
+        mode: 0
+        directValue: "\uC0B0\uD0C0 \uB9C8\uB974\uD0C0"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: registration.ship.owner.name
+      value:
+        mode: 0
+        directValue: "\uAC00\uC2A4\uD30C\uB974 \uCF54\uC5D8\uB958"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: registration.ship.build.year
+      value:
+        mode: 0
+        directValue: "11\uB144 \uC804"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: registration.expiration.date
+      value:
+        mode: 0
+        directValue: "1599\uB144 5\uC6D4 31\uC77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: hull.submit
+      value:
+        mode: 0
+        directValue: Submitted
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: submitted
+        poolValues: []
+    - key: hull.inspection.result
+      value:
+        mode: 0
+        directValue: "\uD56D\uD574 \uBD88\uAC00\uB2A5"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 2
+        poolValues: []
+    - key: hull.accident.history
+      value:
+        mode: 0
+        directValue: "\uCD5C\uADFC 12\uAC1C\uC6D4 \uC774\uB0B4 1\uD68C (1598\uB144
+          5\uC6D4 28\uC77C, \uC595\uC740 \uBC14\uB2E4 \uC811\uCD09 \uC0AC\uACE0)"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 2
+        poolValues: []
+    - key: hull.repair.record
+      value:
+        mode: 0
+        directValue: "\uC5C6\uC74C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: route.submit
+      value:
+        mode: 0
+        directValue: Submitted
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: submitted
+        poolValues: []
+    - key: route.departure.date
+      value:
+        mode: 0
+        directValue: "1598\uB144 6\uC6D4 22\uC77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: route.departure.port
+      value:
+        mode: 0
+        directValue: "\uB9AC\uC2A4\uBCF8"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: route.destination.port
+      value:
+        mode: 0
+        directValue: "\uCE74\uB514\uC2A4"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: route.expected.return.date
+      value:
+        mode: 0
+        directValue: "1598\uB144 6\uC6D4 30\uC77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: route.weather.forecast
+      value:
+        mode: 0
+        directValue: "\uC591\uD638"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: hull.ship.name
+      value:
+        mode: 0
+        directValue: "\uC0B0\uD0C0 \uB9C8\uB974\uD0C0"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    spriteData:
+    - key: ship.sprite
+      value:
+        mode: 0
+        directValue: {fileID: 3443004807202909071, guid: a4e921f723b83e44c89b2275aecaa448, type: 3}
+        poolValues: []
+    adventurers: []
+  editorCaseGoal:
+    mode: 0
+    applySafeValuesForOtherReasons: 1
+    targetRejectionReasonIds: []
+    targetRejectionReasons: []

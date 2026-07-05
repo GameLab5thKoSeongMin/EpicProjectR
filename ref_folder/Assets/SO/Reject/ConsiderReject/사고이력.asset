@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446823f3ee444eb7921fc2f34601c450, type: 3}
+  m_Name: "\uC0AC\uACE0\uC774\uB825"
+  m_EditorClassIdentifier: Assembly-CSharp::MarineInsuranceRejectionReasonDefinition
+  id: reject.accident
+  displayName: "\uC0AC\uACE0 \uC774\uB825"
+  iconSprite: {fileID: 0}
+  description: "-12\uAC1C\uC6D4 \uC774\uB0B4 \uC0AC\uACE0 \uC774\uB825 \uC874\uC7AC"
+  decision: 1
+  dialogueResponseKey: reject.accident
+  ruleTemplate: 5
+  dataKey: hull.accident.history
+  compareDataKey: ship.owner.name2
+  expectedCode: 
+  safeCode: 
+  numberValue: 1
+  triggerDisplayValue: 
+  safeDisplayValue: 
+  showAdvancedConditionEditor: 0
+  relatedDataKeys:
+  - hull.accident.history
+  conditionMatchMode: 0
+  conditions:
+  - dataKey: hull.accident.history
+    conditionOperator: 7
+    valueSource: 1
+    expectedText: 
+    expectedCode: 
+    compareDataKey: 
+    numberValue: 1
+    numberSource: 1
+    numberMarkerText: 
+    ignoreCase: 1
+    useCustomGenerationValues: 0
+    triggerValueOverride: 
+    safeValueOverride: 
+    triggerCodeOverride: 
+    safeCodeOverride: 

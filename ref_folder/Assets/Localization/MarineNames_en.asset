@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: MarineNames_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 4baef012555b6b7439bd9eb2973f2c80, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 685854720
+    m_Localized: Blue Current
+    m_Metadata:
+      m_Items: []
+  - m_Id: 740380672
+    m_Localized: Golden Ridge
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769280
+    m_Localized: Southwind
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769281
+    m_Localized: Silver Wake
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769282
+    m_Localized: Dawn Horizon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769283
+    m_Localized: Azure Route
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769284
+    m_Localized: Hansea Shipping
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769285
+    m_Localized: Eastline Marine
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769286
+    m_Localized: Blueport Logistics
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769287
+    m_Localized: Maris Trade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769288
+    m_Localized: Yuseong Lines
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769289
+    m_Localized: Kangsan Vessel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769290
+    m_Localized: Doyun Kim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769291
+    m_Localized: Seojun Park
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769292
+    m_Localized: Haneul Lee
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769293
+    m_Localized: Minjae Jung
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769294
+    m_Localized: Yujin Choi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769295
+    m_Localized: Jihoon Oh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769296
+    m_Localized: Busan Port
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769297
+    m_Localized: Incheon Port
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769298
+    m_Localized: Mokpo Port
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769299
+    m_Localized: Yeosu Port
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769300
+    m_Localized: Pohang Port
+    m_Metadata:
+      m_Items: []
+  - m_Id: 748769301
+    m_Localized: Jeju Port
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

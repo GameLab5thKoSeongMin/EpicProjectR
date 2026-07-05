@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: MarineFormats_ko
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: ko
+  m_SharedData: {fileID: 11400000, guid: d6f88f8131f4fbc40ab927d08592d612, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 5991168008368160847
+  m_TableData:
+  - m_Id: 308367360
+    m_Localized: "{0:0000}\uB144 {1:00}\uC6D4 {2:00}\uC77C"
+    m_Metadata:
+      m_Items:
+      - rid: 5991168008368160847
+  - m_Id: 329338880
+    m_Localized: "{0:0000}\uB144 {1:00}\uC6D4 {2:00}\uC77C \uAE4C\uC9C0"
+    m_Metadata:
+      m_Items:
+      - rid: 5991168008368160847
+  - m_Id: 329338881
+    m_Localized: "{0}\uB144 \uC804"
+    m_Metadata:
+      m_Items:
+      - rid: 5991168008368160847
+  - m_Id: 329338882
+    m_Localized: "\uCD5C\uADFC 12\uAC1C\uC6D4 \uC774\uB0B4 {0}\uD68C"
+    m_Metadata:
+      m_Items:
+      - rid: 5991168008368160847
+  - m_Id: 329338883
+    m_Localized: "\uACBD\uBBF8 \uBCF4\uC218 {0}\uD68C / \uAD6C\uC870 \uBCF4\uC218
+      {1}\uD68C / \uB300\uC218\uB9AC {2}\uD68C"
+    m_Metadata:
+      m_Items:
+      - rid: 5991168008368160847
+  references:
+    version: 2
+    RefIds:
+    - rid: 5991168008368160847
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 308367360
+        - id: 329338880
+        - id: 329338881
+        - id: 329338882
+        - id: 329338883

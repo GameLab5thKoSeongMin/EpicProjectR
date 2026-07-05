@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: MarineFormats Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: MarineFormats
+  m_TableCollectionNameGuidString: d6f88f8131f4fbc40ab927d08592d612
+  m_Entries:
+  - m_Id: 308367360
+    m_Key: date.default
+    m_Metadata:
+      m_Items: []
+  - m_Id: 329338880
+    m_Key: date.until
+    m_Metadata:
+      m_Items: []
+  - m_Id: 329338881
+    m_Key: ship.age
+    m_Metadata:
+      m_Items: []
+  - m_Id: 329338882
+    m_Key: accident.history
+    m_Metadata:
+      m_Items: []
+  - m_Id: 329338883
+    m_Key: repair.record
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 5991168008368160846
+  references:
+    version: 2
+    RefIds:
+    - rid: 5991168008368160846
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1782559289665

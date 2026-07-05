@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446823f3ee444eb7921fc2f34601c450, type: 3}
+  m_Name: "\uC120\uBC15\uBA85 \uBD88\uC77C\uCE58"
+  m_EditorClassIdentifier: Assembly-CSharp::MarineInsuranceRejectionReasonDefinition
+  id: reject.ship.match
+  displayName: "\uC120\uBC15\uBA85 \uBD88\uC77C\uCE58"
+  iconSprite: {fileID: 0}
+  description: "-\uC120\uBC15\uBA85 \uBD88\uC77C\uCE58"
+  decision: 0
+  ruleTemplate: 4
+  dataKey: insurance.ship.name
+  compareDataKey: registration.ship.name
+  expectedCode: 
+  safeCode: 
+  numberValue: 0
+  triggerDisplayValue: 
+  safeDisplayValue: 
+  showAdvancedConditionEditor: 0
+  relatedDataKeys:
+  - insurance.ship.name
+  - registration.ship.name
+  conditionMatchMode: 0
+  conditions:
+  - dataKey: insurance.ship.name
+    conditionOperator: 6
+    valueSource: 1
+    expectedText: 
+    expectedCode: 
+    compareDataKey: registration.ship.name
+    numberValue: 0
+    numberSource: 1
+    numberMarkerText: 
+    ignoreCase: 1
+    useCustomGenerationValues: 0
+    triggerValueOverride: 
+    safeValueOverride: 
+    triggerCodeOverride: 
+    safeCodeOverride: 

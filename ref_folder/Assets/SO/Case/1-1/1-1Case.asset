@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b5c05fbf793bdf4aaa24a864c3c060a, type: 3}
+  m_Name: 1-1Case
+  m_EditorClassIdentifier: Assembly-CSharp::FixedMarineInsuranceCaseDefinition
+  configuredCase:
+    npcName: "\uC774\uC0AC\uBCA8"
+    npcSprite: {fileID: 21300000, guid: 39477d1a0e368cd4cb05b55fe0abdf38, type: 3}
+    insuranceType: {fileID: 11400000, guid: 0996ec673baf4d54c8bda7cc1347ee05, type: 2}
+    dialogueProfile: {fileID: 11400000, guid: 01b3ceb9c0d794542b51b072fcc540a8, type: 2}
+    premium: 24
+    compensationAmount: 600
+    accidentOccurrenceProbability: 0
+    patience: 2
+    monthEndDocumentPrefabs:
+    - {fileID: 2386872178788819344, guid: 65cd05fd1f460f4458d3e182aee20cf6, type: 3}
+    data:
+    - key: hull.submit
+      value:
+        mode: 0
+        directValue: 
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: route.submit
+      value:
+        mode: 0
+        directValue: 
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: insuracne.submit
+      value:
+        mode: 0
+        directValue: Submitted
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: submitted
+        poolValues: []
+    - key: registration.submit
+      value:
+        mode: 0
+        directValue: Submitted
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: submitted
+        poolValues: []
+    - key: insurance.ship.owner.name
+      value:
+        mode: 0
+        directValue: "\uD53C\uB974\uC2A4 \uB4DC \uC54C\uBC14\uB81D\uAC00"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: registration.ship.owner.name
+      value:
+        mode: 0
+        directValue: "\uD53C\uB974\uC2A4 \uB4DC \uC54C\uBC14\uB81D\uAC00"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: insurance.ship.name
+      value:
+        mode: 0
+        directValue: "\uC0B0\uD0C0 \uB8E8\uC9C0\uC544"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: registration.ship.name
+      value:
+        mode: 0
+        directValue: "\uC0B0\uD0C0 \uB8E8\uC9C0\uC544"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: insurance.captain.name
+      value:
+        mode: 0
+        directValue: "\uB9C8\uD14C\uC6B0\uC2A4 \uD398\uB974\uB09C\uB4DC\uC2A4"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: insurance.departure.date
+      value:
+        mode: 0
+        directValue: "1598\uB144 3\uC6D4 20\uC77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: registration.ship.build.year
+      value:
+        mode: 0
+        directValue: "8\uB144 \uC804"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: registration.expiration.date
+      value:
+        mode: 0
+        directValue: "1599\uB144 1\uC6D4 31\uC77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    spriteData:
+    - key: ship.sprite
+      value:
+        mode: 0
+        directValue: {fileID: 6075148941254785946, guid: bc94563f90f33734cbe9de38dd9b4060, type: 3}
+        poolValues: []
+    adventurers: []
+  editorCaseGoal:
+    mode: 3
+    applySafeValuesForOtherReasons: 1
+    targetRejectionReasonIds:
+    - New Marine Insurance Rejection Reason Definition
+    targetRejectionReasons: []

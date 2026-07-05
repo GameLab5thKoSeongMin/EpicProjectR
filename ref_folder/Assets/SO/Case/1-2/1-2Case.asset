@@ -1,0 +1,199 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b5c05fbf793bdf4aaa24a864c3c060a, type: 3}
+  m_Name: 1-2Case
+  m_EditorClassIdentifier: Assembly-CSharp::FixedMarineInsuranceCaseDefinition
+  configuredCase:
+    npcName: "\uC774\uC0AC\uBCA8"
+    npcSprite: {fileID: 21300000, guid: 39477d1a0e368cd4cb05b55fe0abdf38, type: 3}
+    insuranceType: {fileID: 11400000, guid: 7cc4a74142ff70f4b8cafef8b95e22e7, type: 2}
+    dialogueProfile: {fileID: 11400000, guid: 5bfd364751f89ef4e872051f0d86bcf2, type: 2}
+    premium: 90
+    compensationAmount: 1800
+    accidentOccurrenceProbability: 0
+    patience: 2
+    monthEndDocumentPrefabs:
+    - {fileID: 2386872178788819344, guid: 37c0cd86b27617641b7116664142c4f0, type: 3}
+    data:
+    - key: hull.submit
+      value:
+        mode: 0
+        directValue: Submitted
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: submitted
+        poolValues: []
+    - key: route.submit
+      value:
+        mode: 0
+        directValue: 
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: insuracne.submit
+      value:
+        mode: 0
+        directValue: Submitted
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: submitted
+        poolValues: []
+    - key: registration.submit
+      value:
+        mode: 0
+        directValue: Submitted
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: submitted
+        poolValues: []
+    - key: insurance.ship.owner.name
+      value:
+        mode: 0
+        directValue: "\uB514\uC624\uAD6C \uB204\uB124\uC2A4"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: registration.ship.owner.name
+      value:
+        mode: 0
+        directValue: "\uB514\uC624\uAD6C \uB204\uB124\uC2A4"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: insurance.ship.name
+      value:
+        mode: 0
+        directValue: "\uB178\uC0AC \uC138\uB1E8\uB77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: registration.ship.name
+      value:
+        mode: 0
+        directValue: "\uB178\uC0AC \uC138\uB1E8\uB77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: insurance.captain.name
+      value:
+        mode: 0
+        directValue: "\uBC14\uB974\uD1A8\uB85C\uBA54\uC6B0 \uBC14\uC988"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: insurance.departure.date
+      value:
+        mode: 0
+        directValue: "1598\uB144 3\uC6D4 23\uC77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: registration.ship.build.year
+      value:
+        mode: 0
+        directValue: "16\uB144 \uC804"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 2
+        poolValues: []
+    - key: registration.expiration.date
+      value:
+        mode: 0
+        directValue: "1599\uB144 2\uC6D4 28\uC77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: hull.ship.name
+      value:
+        mode: 0
+        directValue: "\uB178\uC0AC \uC138\uB1E8\uB77C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 
+        poolValues: []
+    - key: hull.inspection.result
+      value:
+        mode: 0
+        directValue: "\uD56D\uD574 \uAC00\uB2A5"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: hull.accident.history
+      value:
+        mode: 0
+        directValue: "\uCD5C\uADFC 12\uAC1C\uC6D4 \uC774\uB0B4 0\uD68C"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 0
+        poolValues: []
+    - key: hull.repair.record
+      value:
+        mode: 0
+        directValue: "\uAD6C\uC870 \uBCF4\uC218 1\uD68C (1597\uB144 11\uC6D4, \uC120\uC218
+          \uC678\uD310 \uC815\uC2DD \uAD50\uCCB4 \uC644\uB8CC)"
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: 2
+        poolValues: []
+    - key: hull.damage.level
+      value:
+        mode: 0
+        directValue: 'lower
+
+'
+        poolValues: []
+      codeValue:
+        mode: 0
+        directValue: middle
+        poolValues: []
+    spriteData:
+    - key: ship.sprite
+      value:
+        mode: 0
+        directValue: {fileID: 3443004807202909071, guid: a4e921f723b83e44c89b2275aecaa448, type: 3}
+        poolValues: []
+    adventurers:
+    - identityDocument:
+        adventurerName: 
+        age: 0
+        portraitSprite: {fileID: 21300000, guid: 56dfa7816189e3b44b480105adb9eaa7, type: 3}
+  editorCaseGoal:
+    mode: 3
+    applySafeValuesForOtherReasons: 1
+    targetRejectionReasonIds:
+    - New Marine Insurance Rejection Reason Definition
+    targetRejectionReasons: []

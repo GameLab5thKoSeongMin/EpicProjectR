@@ -1,0 +1,17 @@
+﻿
+FullName                                                                                                               
+--------                                                                                                               
+C:\Users\rhtjd\OneDrive\바탕 화면\깃허브\EpicProjectR\EpicProjectR\Assets\Readme.asset                                        
+C:\Users\rhtjd\OneDrive\바탕 화면\깃허브\EpicProjectR\EpicProjectR\Assets\Fonts\ImportedFromReference\NotoSerifKR-Bold.ttf    
+C:\Users\rhtjd\OneDrive\바탕 화면\깃허브\EpicProjectR\EpicProjectR\Assets\Fonts\ImportedFromReference\NotoSerifKR-SemiBold.ttf
+C:\Users\rhtjd\OneDrive\바탕 화면\깃허브\EpicProjectR\EpicProjectR\Assets\Scenes\SampleScene.unity                            
+C:\Users\rhtjd\OneDrive\바탕 화면\깃허브\EpicProjectR\EpicProjectR\Assets\Settings\DefaultVolumeProfile.asset                 
+C:\Users\rhtjd\OneDrive\바탕 화면\깃허브\EpicProjectR\EpicProjectR\Assets\Settings\Mobile_Renderer.asset                      
+C:\Users\rhtjd\OneDrive\바탕 화면\깃허브\EpicProjectR\EpicProjectR\Assets\Settings\Mobile_RPAsset.asset                       
+C:\Users\rhtjd\OneDrive\바탕 화면\깃허브\EpicProjectR\EpicProjectR\Assets\Settings\PC_Renderer.asset                          
+C:\Users\rhtjd\OneDrive\바탕 화면\깃허브\EpicProjectR\EpicProjectR\Assets\Settings\PC_RPAsset.asset                           
+C:\Users\rhtjd\OneDrive\바탕 화면\깃허브\EpicProjectR\EpicProjectR\Assets\Settings\SampleSceneProfile.asset                   
+C:\Users\rhtjd\OneDrive\바탕 화면\깃허브\EpicProjectR\EpicProjectR\Assets\Settings\UniversalRenderPipelineGlobalSettings.asset
+C:\Users\rhtjd\OneDrive\바탕 화면\깃허브\EpicProjectR\EpicProjectR\Assets\TutorialInfo\Icons\URP.png                          
+
+

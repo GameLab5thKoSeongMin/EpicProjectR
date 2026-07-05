@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-Assets-Shared
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Localization-Assets-Shared
+  m_GUID: cc74c4e420a995c40a67ad9909618750
+  m_SerializeEntries:
+  - m_GUID: 2309d3ed624eb024fb450415e18feb1b
+    m_Address: Assets/Localization/Dialogue/1-2/Dialouge1-2 Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2bba26552c82d0c4eba6dc3fcb001d0c
+    m_Address: Assets/Localization/Dialogue/3-3/Dialogue3-3 Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 410c2d9dbea17434a91dd5581ab9cb83
+    m_Address: Assets/Localization/MarineDocuments Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4baef012555b6b7439bd9eb2973f2c80
+    m_Address: Assets/Localization/MarineNames Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a250fb4baa3778428997edcd2ccc386
+    m_Address: Assets/Localization/Dialogue/3-1/Dialogue3-1 Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d6f88f8131f4fbc40ab927d08592d612
+    m_Address: Assets/Localization/MarineFormats Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7034a1d06447604d9a19f4a8c5b13c1
+    m_Address: Assets/Localization/Dialogue Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f396d60da1444c04ea1ec45418d720f9
+    m_Address: Assets/Localization/Dialogue/2-2/Dialogue2-2 Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f401c72678321bf4182adf1ea8fc03f6
+    m_Address: Assets/Localization/Dialogue/3-2/Dialogue3-2 Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe7bc9463a6e82d4a985fab4e2ec0e66
+    m_Address: Assets/Localization/Dialogue/2-1/Dialogue2-1 Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: 607cc7080fa75ef458c63a595bb94521, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 99519809273e91444b296875cab01a13, type: 2}
+    - {fileID: 11400000, guid: f552d547b9260494b84b25eb588f86f0, type: 2}
