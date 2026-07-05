@@ -1,0 +1,57 @@
+﻿# Unity generated folders
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# IDE / editor
+.vs/
+.vscode/
+.idea/
+.gradle/
+
+# Unity / C# generated files
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.slnx
+
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Logs / crash
+*.log
+sysinfo.txt
+crashlytics-build.properties
+
+# Builds / packages
+*.apk
+*.aab
+*.unitypackage
+*.unitypackage.meta
+*.app
+
+# Addressables / StreamingAssets temporary files
+[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+[Aa]ssets/[Ss]treamingAssets/aa.meta
+[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# JetBrains Rider plugin
+[Aa]ssets/Plugins/Editor/JetBrains*
