@@ -18,13 +18,12 @@ namespace EpicProjectR.Presentation
         private readonly Dictionary<RuleId, RuleSeverity> ruleSeverities = new Dictionary<RuleId, RuleSeverity>();
 
         private FirstPlayableTweenRunner tweenRunner;
-        private Text headerMetaText;
+        private Text hudTitleText;
+        private Text hudDateText;
+        private Text hudLedgerText;
         private Text entryTitleText;
         private Text entryPromptText;
-        private Text entryDocketText;
-        private Text entryCaseSummaryText;
-        private Text docketText;
-        private Text caseSummaryText;
+        private Text dialogueText;
         private Text reviewStatusText;
         private Text premiumText;
         private Text resultText;
@@ -38,13 +37,15 @@ namespace EpicProjectR.Presentation
         private Transform absoluteRulesRoot;
         private Transform considerationRulesRoot;
         private RectTransform documentBoardRect;
-        private RectTransform docketRect;
         private RectTransform workbenchRect;
         private RectTransform shelfRect;
         private RectTransform dialogueRect;
         private RectTransform contractorRect;
+        private RectTransform entryContractorRect;
         private RectTransform decisionDrawerRect;
         private Button entryButton;
+        private Button entryBellButton;
+        private Button documentBoardButton;
         private Button decisionBoxButton;
         private Button approveButton;
         private Button rejectButton;
@@ -55,6 +56,13 @@ namespace EpicProjectR.Presentation
         private GameObject decisionDrawer;
         private GameObject decisionRow;
         private GameObject nextRow;
+        private Image contractorImage;
+        private CanvasGroup contractorCanvasGroup;
+        private Image entryContractorImage;
+        private CanvasGroup entryContractorCanvasGroup;
+        private IReadOnlyList<string> dialogueLines = Array.Empty<string>();
+        private int dialogueIndex;
+        private bool resultAwaitingDocumentClick;
 
         public FirstPlayableView(FirstPlayableUiTheme theme, FirstPlayableUiFactory factory)
         {
@@ -68,6 +76,7 @@ namespace EpicProjectR.Presentation
 
         public event Action ReviewStarted;
         public event Action DecisionDrawerRequested;
+        public event Action ReviewClosedRequested;
         public event Action<PlayerDecision, IReadOnlyList<RuleId>> DecisionSubmitted;
         public event Action ResultAcknowledged;
 
@@ -98,7 +107,6 @@ namespace EpicProjectR.Presentation
             entryRoot = CreateRoot(background.transform, "Entry Contract Root");
             reviewRoot = CreateRoot(background.transform, "Review Sequence Root");
             BuildEntry(entryRoot.transform);
-            BuildDocketPaper(reviewRoot.transform);
             BuildCharacterDialogue(reviewRoot.transform);
             BuildWorkbench(reviewRoot.transform);
             BuildShelfRules(reviewRoot.transform);
@@ -116,15 +124,27 @@ namespace EpicProjectR.Presentation
             }
 
             ClearReviewRoots();
-            headerMetaText.text = state.HeaderMeta;
             entryTitleText.text = state.EntryTitle;
             entryPromptText.text = state.EntryPrompt;
-            entryDocketText.text = state.Docket;
-            entryCaseSummaryText.text = state.CaseSummary;
             entryButton.interactable = true;
+            entryBellButton.interactable = true;
+            resultAwaitingDocumentClick = false;
+            ResetEntryContractorPreview();
             entryRoot.SetActive(true);
             reviewRoot.SetActive(false);
             decisionDrawer.SetActive(false);
+        }
+
+        public void RenderHud(FirstPlayableHudState state)
+        {
+            if (state == null)
+            {
+                throw new ArgumentNullException(nameof(state));
+            }
+
+            hudTitleText.text = state.Title;
+            hudDateText.text = state.Date;
+            hudLedgerText.text = FirstPlayableKoreanText.HudLedger(state.Ducats, state.Reputation);
         }
 
         public void RenderReview(FirstPlayableReviewScreenState state)
@@ -144,10 +164,8 @@ namespace EpicProjectR.Presentation
             decisionDrawer.SetActive(false);
             decisionBox.SetActive(true);
             decisionBoxButton.interactable = true;
+            resultAwaitingDocumentClick = false;
 
-            headerMetaText.text = state.HeaderMeta;
-            docketText.text = state.Docket;
-            caseSummaryText.text = state.CaseSummary;
             reviewStatusText.text = state.ReviewStatus;
             premiumText.text = state.Premium;
             resultText.text = FirstPlayableKoreanText.ReviewWaitingAudit;
@@ -156,6 +174,7 @@ namespace EpicProjectR.Presentation
             outcomeText.color = theme.Ink;
             settlementText.text = FirstPlayableKoreanText.ReviewWaitingSettlement;
             settlementText.color = theme.MutedInk;
+            SetDialogueLines(state.DialogueLines);
 
             for (var i = 0; i < state.Documents.Count; i++)
             {
@@ -183,6 +202,12 @@ namespace EpicProjectR.Presentation
             tweenRunner.MoveTo(decisionDrawerRect, FirstPlayableMainSceneRectSpec.DecisionDrawerClosedPosition, FirstPlayableMainSceneRectSpec.DecisionDrawerOpenPosition, 0.28f);
         }
 
+        public void CloseDecisionDrawer()
+        {
+            RefreshDecisionDrawer();
+            tweenRunner.MoveTo(decisionDrawerRect, FirstPlayableMainSceneRectSpec.DecisionDrawerOpenPosition, FirstPlayableMainSceneRectSpec.DecisionDrawerClosedPosition, 0.22f);
+        }
+
         public void RenderResult(FirstPlayableResultScreenState state)
         {
             if (state == null)
@@ -190,7 +215,6 @@ namespace EpicProjectR.Presentation
                 throw new ArgumentNullException(nameof(state));
             }
 
-            headerMetaText.text = state.HeaderMeta;
             premiumText.text = state.Premium;
             resultText.text = state.Result;
             resultText.color = state.AuditCorrect ? theme.Correct : theme.Reject;
@@ -206,6 +230,8 @@ namespace EpicProjectR.Presentation
             nextRow.SetActive(true);
             nextButton.interactable = true;
             nextButtonText.text = state.NextButton;
+            resultAwaitingDocumentClick = true;
+            PlayCharacterExit();
         }
 
         public void RenderComplete(FirstPlayableCompleteScreenState state)
@@ -220,12 +246,10 @@ namespace EpicProjectR.Presentation
             ruleRows.Clear();
             ruleSeverities.Clear();
 
-            headerMetaText.text = state.HeaderMeta;
             entryTitleText.text = state.Result;
             entryPromptText.text = state.Outcome + "\n" + state.Settlement;
-            entryDocketText.text = state.Docket;
-            entryCaseSummaryText.text = state.CaseSummary;
             entryButton.interactable = false;
+            entryBellButton.interactable = false;
             entryRoot.SetActive(true);
             reviewRoot.SetActive(false);
             decisionDrawer.SetActive(false);
@@ -245,7 +269,7 @@ namespace EpicProjectR.Presentation
                 factory.Assets.PanelSprite);
             var layout = header.AddComponent<HorizontalLayoutGroup>();
             layout.padding = new RectOffset(26, 26, 10, 10);
-            layout.spacing = 14;
+            layout.spacing = 18;
             layout.childForceExpandWidth = false;
             layout.childAlignment = TextAnchor.MiddleLeft;
 
@@ -254,16 +278,31 @@ namespace EpicProjectR.Presentation
             letterElement.preferredWidth = 74;
             letterElement.preferredHeight = 54;
 
-            var title = factory.CreateText(header.transform, "Office Title", theme.TitleFont, 30, FontStyle.Bold, theme.LightText, TextAnchor.MiddleLeft);
-            title.text = FirstPlayableKoreanText.OfficeTitle;
-            title.GetComponent<LayoutElement>().flexibleWidth = 1;
+            hudTitleText = factory.CreateText(header.transform, "Office Title", theme.TitleFont, 30, FontStyle.Bold, theme.LightText, TextAnchor.MiddleLeft);
+            hudTitleText.text = FirstPlayableKoreanText.OfficeTitle;
+            hudTitleText.GetComponent<LayoutElement>().preferredWidth = 620;
 
-            headerMetaText = factory.CreateText(header.transform, "Header Meta", theme.BodyFont, 16, FontStyle.Bold, theme.MutedText, TextAnchor.MiddleRight);
-            headerMetaText.GetComponent<LayoutElement>().preferredWidth = 720;
+            hudDateText = factory.CreateText(header.transform, "Header Date", theme.TitleFont, 24, FontStyle.Bold, theme.LightText, TextAnchor.MiddleCenter);
+            hudDateText.GetComponent<LayoutElement>().flexibleWidth = 1;
+
+            hudLedgerText = factory.CreateText(header.transform, "Header Ledger", theme.BodyFont, 18, FontStyle.Bold, theme.MutedText, TextAnchor.MiddleRight);
+            hudLedgerText.GetComponent<LayoutElement>().preferredWidth = 250;
         }
 
         private void BuildEntry(Transform parent)
         {
+            var contractor = factory.CreateAnchoredPanel(parent, "Entry Contractor Preview", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), FirstPlayableMainSceneRectSpec.EntryContractorPosition, FirstPlayableMainSceneRectSpec.EntryContractorSize, Color.white, false, factory.Assets.MainContractorSprite ?? factory.Assets.ShipSprite);
+            entryContractorRect = contractor.GetComponent<RectTransform>();
+            entryContractorCanvasGroup = contractor.AddComponent<CanvasGroup>();
+            entryContractorImage = contractor.GetComponent<Image>();
+            entryContractorImage.preserveAspect = true;
+
+            var bell = factory.CreateAnchoredPanel(parent, "Entry Bell", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), FirstPlayableMainSceneRectSpec.EntryBellPosition, FirstPlayableMainSceneRectSpec.EntryBellSize, Color.white, true, factory.Assets.MainBellSprite ?? factory.Assets.MainSmallButtonSprite);
+            entryBellButton = bell.AddComponent<Button>();
+            entryBellButton.targetGraphic = bell.GetComponent<Image>();
+            theme.ApplyButton(entryBellButton, FirstPlayableButtonTone.Neutral);
+            entryBellButton.onClick.AddListener(() => ReviewStarted?.Invoke());
+
             var panel = factory.CreateAnchoredPanel(parent, "Clickable Entry Contract", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), FirstPlayableMainSceneRectSpec.EntryDocumentPosition, FirstPlayableMainSceneRectSpec.EntryDocumentSize, theme.Paper, true, factory.Assets.MainPaperSprite ?? factory.Assets.MainPaperTextureSprite ?? factory.Assets.DocumentPaperSprite);
             entryButton = panel.AddComponent<Button>();
             entryButton.targetGraphic = panel.GetComponent<Image>();
@@ -277,53 +316,32 @@ namespace EpicProjectR.Presentation
             layout.childForceExpandHeight = false;
 
             entryTitleText = factory.CreateText(panel.transform, "Entry Title", theme.TitleFont, 24, FontStyle.Bold, theme.Ink, TextAnchor.MiddleCenter);
-            entryTitleText.GetComponent<LayoutElement>().preferredHeight = 42;
+            entryTitleText.GetComponent<LayoutElement>().preferredHeight = 96;
             entryPromptText = factory.CreateText(panel.transform, "Entry Prompt", theme.BodyFont, 14, FontStyle.Bold, theme.MutedInk, TextAnchor.MiddleCenter);
-            entryPromptText.GetComponent<LayoutElement>().preferredHeight = 36;
-            factory.CreateDivider(panel.transform);
-            entryDocketText = factory.CreateText(panel.transform, "Entry Docket", theme.BodyFont, 13, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
-            entryDocketText.GetComponent<LayoutElement>().preferredHeight = 72;
-            entryCaseSummaryText = factory.CreateText(panel.transform, "Entry Case Summary", theme.BodyFont, 12, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
-            entryCaseSummaryText.GetComponent<LayoutElement>().flexibleHeight = 1;
-        }
-
-        private void BuildDocketPaper(Transform parent)
-        {
-            var shadow = factory.CreateAnchoredPanel(parent, "Docket Paper Shadow", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), FirstPlayableMainSceneRectSpec.DocketOpenPosition + new Vector2(12f, -10f), FirstPlayableMainSceneRectSpec.DocketSize, theme.PaperShadow, false);
-            shadow.transform.SetAsFirstSibling();
-            var panel = factory.CreateAnchoredPanel(parent, "Left Contract Paper Stack", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), FirstPlayableMainSceneRectSpec.DocketOpenPosition, FirstPlayableMainSceneRectSpec.DocketSize, theme.Paper, true, factory.Assets.MainPaperSprite ?? factory.Assets.DocumentPaperSprite);
-            docketRect = panel.GetComponent<RectTransform>();
-            var layout = panel.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(18, 18, 18, 18);
-            layout.spacing = 10;
-            layout.childForceExpandWidth = true;
-            layout.childForceExpandHeight = false;
-
-            factory.CreateSectionTitle(panel.transform, FirstPlayableKoreanText.ContractDocketTitle);
-            docketText = factory.CreateText(panel.transform, "Contract List", theme.BodyFont, 16, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
-            docketText.GetComponent<LayoutElement>().preferredHeight = 128;
-            factory.CreateDivider(panel.transform);
-            factory.CreateSectionTitle(panel.transform, FirstPlayableKoreanText.CurrentCaseTitle);
-            caseSummaryText = factory.CreateText(panel.transform, "Case Summary", theme.BodyFont, 15, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
-            caseSummaryText.GetComponent<LayoutElement>().flexibleHeight = 1;
+            entryPromptText.GetComponent<LayoutElement>().preferredHeight = 72;
         }
 
         private void BuildCharacterDialogue(Transform parent)
         {
             var contractor = factory.CreateAnchoredPanel(parent, "Contractor Visual", new Vector2(0f, 0f), new Vector2(0f, 0f), FirstPlayableMainSceneRectSpec.ContractorOpenPosition, FirstPlayableMainSceneRectSpec.ContractorSize, Color.white, false, factory.Assets.MainContractorSprite ?? factory.Assets.ShipSprite);
             contractorRect = contractor.GetComponent<RectTransform>();
-            var contractorImage = contractor.GetComponent<Image>();
+            contractorCanvasGroup = contractor.AddComponent<CanvasGroup>();
+            contractorImage = contractor.GetComponent<Image>();
             contractorImage.preserveAspect = true;
             contractorImage.color = factory.Assets.MainContractorSprite != null ? Color.white : theme.Gold;
 
-            var dialogue = factory.CreateAnchoredPanel(parent, "Dialogue Panel", new Vector2(0f, 0f), new Vector2(0f, 0f), FirstPlayableMainSceneRectSpec.DialogueOpenPosition, FirstPlayableMainSceneRectSpec.DialogueSize, theme.Paper, true, factory.Assets.MainSpeechBubbleSprite ?? factory.Assets.MainPaperSprite);
+            var dialogue = factory.CreateAnchoredPanel(parent, "Dialogue Panel", new Vector2(0f, 1f), new Vector2(0f, 1f), FirstPlayableMainSceneRectSpec.DialogueOpenPosition, FirstPlayableMainSceneRectSpec.DialogueSize, theme.Paper, true, factory.Assets.MainSpeechBubbleSprite ?? factory.Assets.MainPaperSprite);
             dialogueRect = dialogue.GetComponent<RectTransform>();
+            var button = dialogue.AddComponent<Button>();
+            button.targetGraphic = dialogue.GetComponent<Image>();
+            theme.ApplyButton(button, FirstPlayableButtonTone.Neutral);
+            button.onClick.AddListener(AdvanceDialogue);
             var layout = dialogue.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(24, 24, 20, 18);
+            layout.padding = new RectOffset(34, 34, 28, 24);
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = true;
-            var text = factory.CreateText(dialogue.transform, "Dialogue Text", theme.BodyFont, 18, FontStyle.Bold, theme.Ink, TextAnchor.MiddleLeft);
-            text.text = FirstPlayableKoreanText.DialogueReviewIntro;
+            dialogueText = factory.CreateText(dialogue.transform, "Dialogue Text", theme.BodyFont, 24, FontStyle.Bold, theme.Ink, TextAnchor.MiddleLeft);
+            dialogueText.text = FirstPlayableKoreanText.DialogueReviewIntro;
         }
 
         private void BuildWorkbench(Transform parent)
@@ -363,6 +381,10 @@ namespace EpicProjectR.Presentation
             boardElement.preferredHeight = FirstPlayableMainSceneRectSpec.DocumentBoardSize.y;
             boardElement.flexibleHeight = 1;
             documentBoardRect = documentBoard.GetComponent<RectTransform>();
+            documentBoardButton = documentBoard.AddComponent<Button>();
+            documentBoardButton.targetGraphic = documentBoard.GetComponent<Image>();
+            theme.ApplyButton(documentBoardButton, FirstPlayableButtonTone.Neutral);
+            documentBoardButton.onClick.AddListener(OnDocumentBoardClicked);
             documentRoot = documentBoard.transform;
         }
 
@@ -376,9 +398,8 @@ namespace EpicProjectR.Presentation
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = false;
 
-            factory.CreateSectionTitle(panel.transform, FirstPlayableKoreanText.RuleChecklistTitle);
             reviewStatusText = factory.CreateText(panel.transform, "Review Status", theme.BodyFont, 14, FontStyle.Bold, theme.LightText, TextAnchor.UpperLeft);
-            reviewStatusText.GetComponent<LayoutElement>().preferredHeight = 52;
+            reviewStatusText.GetComponent<LayoutElement>().preferredHeight = 38;
             BuildRuleSection(panel.transform, FirstPlayableKoreanText.AbsoluteRuleSectionTitle, out absoluteRulesRoot);
             BuildRuleSection(panel.transform, FirstPlayableKoreanText.ConsiderationRuleSectionTitle, out considerationRulesRoot);
         }
@@ -435,8 +456,16 @@ namespace EpicProjectR.Presentation
             var drawerTitle = factory.CreateText(resultColumn.transform, "Decision Drawer Title", theme.TitleFont, 20, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
             drawerTitle.text = FirstPlayableKoreanText.DecisionDrawerTitle;
             drawerTitle.GetComponent<LayoutElement>().preferredHeight = 30;
-            drawerPremiumText = factory.CreateText(resultColumn.transform, "Drawer Premium", theme.TitleFont, 17, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
-            drawerSummaryText = factory.CreateText(resultColumn.transform, "Drawer Summary", theme.BodyFont, 14, FontStyle.Bold, theme.MutedInk, TextAnchor.UpperLeft);
+
+            var summaryPaper = factory.CreatePanel(resultColumn.transform, "Selected Reason Paper", Color.white, true, factory.Assets.MainPaperSprite ?? factory.Assets.DocumentPaperSprite);
+            summaryPaper.AddComponent<LayoutElement>().preferredHeight = 92;
+            var summaryLayout = summaryPaper.AddComponent<VerticalLayoutGroup>();
+            summaryLayout.padding = new RectOffset(12, 12, 10, 14);
+            summaryLayout.spacing = 5;
+            summaryLayout.childForceExpandWidth = true;
+            summaryLayout.childForceExpandHeight = false;
+            drawerPremiumText = factory.CreateText(summaryPaper.transform, "Drawer Premium", theme.TitleFont, 17, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
+            drawerSummaryText = factory.CreateText(summaryPaper.transform, "Drawer Summary", theme.BodyFont, 14, FontStyle.Bold, theme.MutedInk, TextAnchor.UpperLeft);
             premiumText = factory.CreateText(resultColumn.transform, "Premium Quote", theme.TitleFont, 17, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
             resultText = factory.CreateText(resultColumn.transform, "Audit Result", theme.BodyFont, 14, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
             outcomeText = factory.CreateText(resultColumn.transform, "Outcome Result", theme.BodyFont, 14, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
@@ -494,12 +523,8 @@ namespace EpicProjectR.Presentation
             layout.childForceExpandHeight = false;
 
             var title = factory.CreateText(card.transform, "Document Title", theme.TitleFont, 17, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
-            title.text = $"{FirstPlayableKoreanText.DocumentTitle(document)}  |  {document.Id}";
+            title.text = FirstPlayableKoreanText.DocumentTitle(document);
             title.GetComponent<LayoutElement>().preferredHeight = 30;
-
-            var status = factory.CreateText(card.transform, "Document Status", theme.BodyFont, 13, FontStyle.Bold, document.Submitted ? theme.MutedInk : theme.Reject, TextAnchor.UpperLeft);
-            status.text = FirstPlayableKoreanText.DocumentStatus(document.Submitted);
-            status.GetComponent<LayoutElement>().preferredHeight = 24;
 
             if (!document.Submitted)
             {
@@ -561,7 +586,7 @@ namespace EpicProjectR.Presentation
             textLayout.childForceExpandHeight = false;
 
             var title = factory.CreateText(labelColumn.transform, "Title", theme.TitleFont, 14, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
-            title.text = $"{rule.Id}  {FirstPlayableKoreanText.RuleTitle(rule)}";
+            title.text = FirstPlayableKoreanText.RuleTitle(rule);
             var detail = factory.CreateText(labelColumn.transform, "Detail", theme.BodyFont, 12, FontStyle.Bold, theme.MutedInk, TextAnchor.UpperLeft);
             detail.text = FirstPlayableKoreanText.RuleFindingText(rowState.IsTriggered);
 
@@ -581,13 +606,75 @@ namespace EpicProjectR.Presentation
             DecisionSubmitted?.Invoke(submittedDecision, ruleToggles.Where(pair => pair.Value.isOn).Select(pair => pair.Key).ToList());
         }
 
+        private void OnDocumentBoardClicked()
+        {
+            if (resultAwaitingDocumentClick)
+            {
+                resultAwaitingDocumentClick = false;
+                ResultAcknowledged?.Invoke();
+                return;
+            }
+
+            ReviewClosedRequested?.Invoke();
+        }
+
+        private void SetDialogueLines(IReadOnlyList<string> lines)
+        {
+            dialogueLines = lines != null && lines.Count > 0
+                ? lines
+                : new[] { FirstPlayableKoreanText.DialogueReviewIntro };
+            dialogueIndex = 0;
+            dialogueText.text = dialogueLines[dialogueIndex];
+        }
+
+        private void AdvanceDialogue()
+        {
+            if (dialogueLines == null || dialogueLines.Count == 0)
+            {
+                return;
+            }
+
+            dialogueIndex = Mathf.Min(dialogueIndex + 1, dialogueLines.Count - 1);
+            dialogueText.text = dialogueLines[dialogueIndex];
+        }
+
+        private void ResetEntryContractorPreview()
+        {
+            if (entryContractorRect != null)
+            {
+                entryContractorRect.localScale = new Vector3(0.82f, 0.82f, 1f);
+            }
+
+            if (entryContractorCanvasGroup != null)
+            {
+                entryContractorCanvasGroup.alpha = 0.62f;
+            }
+
+            if (entryContractorImage != null)
+            {
+                entryContractorImage.color = factory.Assets.MainContractorSprite != null
+                    ? new Color(0.72f, 0.68f, 0.62f, 1f)
+                    : theme.Gold;
+            }
+        }
+
+        private void PlayCharacterExit()
+        {
+            tweenRunner.MoveTo(contractorRect, FirstPlayableMainSceneRectSpec.ContractorOpenPosition, FirstPlayableMainSceneRectSpec.ContractorClosedPosition, 0.32f);
+            tweenRunner.ScaleTo(contractorRect, Vector3.one, new Vector3(0.58f, 0.58f, 1f), 0.32f);
+            tweenRunner.FadeTo(contractorCanvasGroup, 1f, 0.25f, 0.32f);
+            tweenRunner.TintTo(contractorImage, contractorImage != null ? contractorImage.color : Color.white, new Color(0.34f, 0.3f, 0.28f, 0.9f), 0.32f);
+        }
+
         private void PlayReviewOpening()
         {
-            tweenRunner.MoveTo(docketRect, FirstPlayableMainSceneRectSpec.DocketClosedPosition, FirstPlayableMainSceneRectSpec.DocketOpenPosition, 0.25f);
             tweenRunner.MoveTo(contractorRect, FirstPlayableMainSceneRectSpec.ContractorClosedPosition, FirstPlayableMainSceneRectSpec.ContractorOpenPosition, 0.32f);
             tweenRunner.MoveTo(dialogueRect, FirstPlayableMainSceneRectSpec.DialogueClosedPosition, FirstPlayableMainSceneRectSpec.DialogueOpenPosition, 0.36f);
             tweenRunner.MoveTo(workbenchRect, FirstPlayableMainSceneRectSpec.WorkbenchClosedPosition, FirstPlayableMainSceneRectSpec.WorkbenchOpenPosition, 0.4f);
             tweenRunner.MoveTo(shelfRect, FirstPlayableMainSceneRectSpec.ShelfClosedPosition, FirstPlayableMainSceneRectSpec.ShelfOpenPosition, 0.4f);
+            tweenRunner.ScaleTo(contractorRect, new Vector3(0.58f, 0.58f, 1f), Vector3.one, 0.42f);
+            tweenRunner.FadeTo(contractorCanvasGroup, 0.35f, 1f, 0.42f);
+            tweenRunner.TintTo(contractorImage, new Color(0.38f, 0.34f, 0.3f, 1f), factory.Assets.MainContractorSprite != null ? Color.white : theme.Gold, 0.42f);
             decisionDrawerRect.anchoredPosition = FirstPlayableMainSceneRectSpec.DecisionDrawerClosedPosition;
         }
 

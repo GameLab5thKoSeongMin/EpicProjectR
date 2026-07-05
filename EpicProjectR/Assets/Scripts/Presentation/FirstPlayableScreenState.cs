@@ -30,6 +30,22 @@ namespace EpicProjectR.Presentation
         public bool IsTriggered { get; }
     }
 
+    public sealed class FirstPlayableHudState
+    {
+        public FirstPlayableHudState(string title, string date, int ducats, int reputation)
+        {
+            Title = title ?? throw new ArgumentNullException(nameof(title));
+            Date = date ?? throw new ArgumentNullException(nameof(date));
+            Ducats = ducats;
+            Reputation = reputation;
+        }
+
+        public string Title { get; }
+        public string Date { get; }
+        public int Ducats { get; }
+        public int Reputation { get; }
+    }
+
     public sealed class FirstPlayableEntryScreenState
     {
         public FirstPlayableEntryScreenState(
@@ -63,6 +79,7 @@ namespace EpicProjectR.Presentation
             string caseSummary,
             string reviewStatus,
             string premium,
+            IEnumerable<string> dialogueLines,
             IEnumerable<DocumentRecord> documents,
             IEnumerable<FirstPlayableRuleRowState> rules)
         {
@@ -72,6 +89,7 @@ namespace EpicProjectR.Presentation
             CaseSummary = caseSummary ?? throw new ArgumentNullException(nameof(caseSummary));
             ReviewStatus = reviewStatus ?? throw new ArgumentNullException(nameof(reviewStatus));
             Premium = premium ?? throw new ArgumentNullException(nameof(premium));
+            DialogueLines = (dialogueLines ?? throw new ArgumentNullException(nameof(dialogueLines))).ToList().AsReadOnly();
             Documents = (documents ?? throw new ArgumentNullException(nameof(documents))).ToList().AsReadOnly();
             Rules = (rules ?? throw new ArgumentNullException(nameof(rules))).ToList().AsReadOnly();
         }
@@ -82,6 +100,7 @@ namespace EpicProjectR.Presentation
         public string CaseSummary { get; }
         public string ReviewStatus { get; }
         public string Premium { get; }
+        public IReadOnlyList<string> DialogueLines { get; }
         public IReadOnlyList<DocumentRecord> Documents { get; }
         public IReadOnlyList<FirstPlayableRuleRowState> Rules { get; }
     }

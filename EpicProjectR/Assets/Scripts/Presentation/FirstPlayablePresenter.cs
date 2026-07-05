@@ -14,6 +14,9 @@ namespace EpicProjectR.Presentation
         private readonly IReadOnlyList<ContractCase> allContracts;
         private readonly IReadOnlyList<RuleDefinition> allRules;
         private readonly FirstPlayableView view;
+        private readonly HashSet<ContractId> incentivizedContracts = new HashSet<ContractId>();
+        private int officeDucats;
+        private int reputation;
         private FirstPlayableScreenMode currentMode = FirstPlayableScreenMode.Entry;
 
         public FirstPlayablePresenter(
@@ -29,6 +32,7 @@ namespace EpicProjectR.Presentation
             view.ReviewStarted += StartReview;
             view.DecisionDrawerRequested += OpenDecisionDrawer;
             view.DecisionSubmitted += SubmitDecision;
+            view.ReviewClosedRequested += CloseReviewToEntry;
             view.ResultAcknowledged += AdvanceAfterResult;
         }
 
@@ -55,6 +59,7 @@ namespace EpicProjectR.Presentation
                 FirstPlayableKoreanText.CaseSummary(current),
                 FirstPlayableKoreanText.EntryDocumentTitle,
                 FirstPlayableKoreanText.EntryPrompt));
+            view.RenderHud(CreateHudState());
         }
 
         public void StartReview()
@@ -71,7 +76,19 @@ namespace EpicProjectR.Presentation
 
         public void OpenDecisionDrawer()
         {
-            if (session.IsComplete || currentMode != FirstPlayableScreenMode.Reviewing)
+            if (session.IsComplete)
+            {
+                return;
+            }
+
+            if (currentMode == FirstPlayableScreenMode.DecisionReady)
+            {
+                view.CloseDecisionDrawer();
+                currentMode = FirstPlayableScreenMode.Reviewing;
+                return;
+            }
+
+            if (currentMode != FirstPlayableScreenMode.Reviewing)
             {
                 return;
             }
@@ -79,6 +96,16 @@ namespace EpicProjectR.Presentation
             currentMode = FirstPlayableScreenMode.DecisionDrawerOpening;
             view.OpenDecisionDrawer();
             currentMode = FirstPlayableScreenMode.DecisionReady;
+        }
+
+        public void CloseReviewToEntry()
+        {
+            if (currentMode != FirstPlayableScreenMode.Reviewing && currentMode != FirstPlayableScreenMode.DecisionReady)
+            {
+                return;
+            }
+
+            ShowCurrentCase();
         }
 
         private void RenderReview()
@@ -98,8 +125,10 @@ namespace EpicProjectR.Presentation
                 FirstPlayableKoreanText.CaseSummary(current),
                 FirstPlayableKoreanText.ActiveRuleStatus(activeRules.Count),
                 FirstPlayableKoreanText.PreSubmitPremium(review.ConsiderationCount),
+                FirstPlayableKoreanText.DialogueLines(current),
                 current.Documents,
                 activeRules));
+            view.RenderHud(CreateHudState());
         }
 
         public void SubmitDecision(PlayerDecision decision, IReadOnlyList<RuleId> checkedRuleIds)
@@ -109,7 +138,9 @@ namespace EpicProjectR.Presentation
                 return;
             }
 
+            var contract = session.CurrentContract;
             var result = session.Submit(decision, checkedRuleIds);
+            ApplyLedger(result, contract);
             ShowResult(result);
         }
 
@@ -129,13 +160,14 @@ namespace EpicProjectR.Presentation
 
             view.RenderResult(new FirstPlayableResultScreenState(
                 ResultHeaderMeta(result.Audit.ContractId),
-                FirstPlayableKoreanText.SubmittedPremium(result.Premium.MultiplierPercent, result.Premium.RejectRecommended, JoinIds(result.Premium.ConsiderationRuleIds)),
+                FirstPlayableKoreanText.SubmittedPremium(result.Premium.MultiplierPercent, result.Premium.RejectRecommended, result.Premium.ConsiderationRuleIds.Count),
                 RenderAuditResult(result.Audit),
                 FirstPlayableKoreanText.OutcomeResult(result),
                 RenderSettlement(result.Settlement),
                 session.IsComplete ? FirstPlayableKoreanText.FinishButton : FirstPlayableKoreanText.NextContractButton,
                 result.Audit.IsCorrectAction,
                 result.Outcome.AccidentOccurred));
+            view.RenderHud(CreateHudState());
         }
 
         private void ShowCompleted()
@@ -150,6 +182,36 @@ namespace EpicProjectR.Presentation
                 FirstPlayableKoreanText.CompleteResult,
                 FirstPlayableKoreanText.CompleteOutcome,
                 FirstPlayableKoreanText.CompleteSettlement));
+            view.RenderHud(CreateHudState());
+        }
+
+        private FirstPlayableHudState CreateHudState()
+        {
+            return new FirstPlayableHudState(
+                FirstPlayableKoreanText.OfficeTitle,
+                FirstPlayableKoreanText.HudDate(session.TurnDefinition.Date),
+                officeDucats,
+                reputation);
+        }
+
+        private void ApplyLedger(SubmissionResult result, ContractCase contract)
+        {
+            if (result == null || contract == null)
+            {
+                return;
+            }
+
+            reputation += result.Settlement.TotalScoreDelta;
+
+            if (!result.ActiveContractCreated || incentivizedContracts.Contains(contract.Id))
+            {
+                return;
+            }
+
+            var finalPremium = contract.BasePremium.Ducats * result.Premium.MultiplierPercent / 100;
+            var incentive = finalPremium / 100;
+            officeDucats += incentive;
+            incentivizedContracts.Add(contract.Id);
         }
 
         private string ResultHeaderMeta(ContractId contractId)

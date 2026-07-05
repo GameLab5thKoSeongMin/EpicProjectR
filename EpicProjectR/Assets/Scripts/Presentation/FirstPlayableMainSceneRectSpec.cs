@@ -12,18 +12,22 @@ namespace EpicProjectR.Presentation
 
         public static readonly Vector2 EntryDocumentPosition = new Vector2(0f, -331f);
         public static readonly Vector2 EntryDocumentSize = new Vector2(420f, 310f);
+        public static readonly Vector2 EntryBellPosition = new Vector2(-150f, -330f);
+        public static readonly Vector2 EntryBellSize = new Vector2(120f, 92f);
+        public static readonly Vector2 EntryContractorPosition = new Vector2(138f, -256f);
+        public static readonly Vector2 EntryContractorSize = new Vector2(190f, 240f);
 
         public static readonly Vector2 DocketOpenPosition = new Vector2(-430f, -48f);
         public static readonly Vector2 DocketClosedPosition = new Vector2(-820f, -48f);
         public static readonly Vector2 DocketSize = new Vector2(340f, 720f);
 
-        public static readonly Vector2 ContractorOpenPosition = new Vector2(132f, 184f);
-        public static readonly Vector2 ContractorClosedPosition = new Vector2(-190f, 184f);
-        public static readonly Vector2 ContractorSize = new Vector2(230f, 290f);
+        public static readonly Vector2 ContractorOpenPosition = new Vector2(290f, 120f);
+        public static readonly Vector2 ContractorClosedPosition = new Vector2(88f, 120f);
+        public static readonly Vector2 ContractorSize = new Vector2(280f, 354f);
 
-        public static readonly Vector2 DialogueOpenPosition = new Vector2(326f, -378f);
-        public static readonly Vector2 DialogueClosedPosition = new Vector2(-430f, -378f);
-        public static readonly Vector2 DialogueSize = new Vector2(540f, 142f);
+        public static readonly Vector2 DialogueOpenPosition = new Vector2(375f, -220f);
+        public static readonly Vector2 DialogueClosedPosition = new Vector2(-490f, -220f);
+        public static readonly Vector2 DialogueSize = new Vector2(690f, 250f);
 
         public static readonly Vector2 WorkbenchOpenPosition = new Vector2(44f, -39f);
         public static readonly Vector2 WorkbenchClosedPosition = new Vector2(1371f, -39f);
@@ -32,7 +36,7 @@ namespace EpicProjectR.Presentation
 
         public static readonly Vector2 ShelfOpenPosition = new Vector2(-242f, -40f);
         public static readonly Vector2 ShelfClosedPosition = new Vector2(485f, -40f);
-        public static readonly Vector2 ShelfSize = new Vector2(485f, 1001f);
+        public static readonly Vector2 ShelfSize = new Vector2(430f, 1001f);
         public static readonly Vector2 RulePanelImageSize = new Vector2(419f, 73f);
         public const float RuleRowHeight = 73f;
 

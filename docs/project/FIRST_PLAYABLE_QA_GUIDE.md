@@ -8,7 +8,7 @@ Last updated: 2026-07-06.
 2. Open `Assets/Scenes/SampleScene.unity`.
 3. Press Play.
 4. A runtime-generated `First Playable Canvas` should appear automatically.
-5. The UI should open on a clickable Main-scene-style incoming contract paper. After clicking it, the review layout should appear with a full-screen background, top date/status strip, left paper contract docket, lower-left dialogue/contractor area, central draggable document workbench, right split AR/CR checklist, lower-right decision box, and bottom decision drawer.
+5. The UI should open on a Main-scene-style bell/document/contractor entry composition. After clicking the bell or document, the review layout should appear with a full-screen background, top HUD, upper-left dialogue/contractor area, central draggable document workbench, right split AR/CR checklist, lower-right `인수 결정서`, and bottom decision drawer.
 
 No scene or prefab needs to be manually wired for this pass.
 
@@ -28,28 +28,27 @@ The fixture session contains 3 ship insurance contracts:
 - Reject button: `거절`
 - Next button: `다음 계약`
 - Finish button: `종료`
-- Contract docket title: `계약 목록`
-- Current case title: `현재 계약`
 - Document section title: `제출 서류`
-- Rule section title: `AR / CR 심사 항목`
+- Absolute rejection section title: `절대 거절 사유`
+- Consideration section title: `거절 고려 사유`
+- Decision box title: `인수 결정서`
 
 ## Manual Checks
 
-- Confirm the turn/date header shows turn 1 and `1599-01-15`.
+- Confirm the top HUD shows `리세브라 해상 보험 심사국`, `1599년 01월 15일`, ducats, and reputation.
 - Confirm normal player-facing UI text is Korean.
 - Confirm the imported Noto Serif KR font is used for title/body text, or that the UI falls back to an OS font if Unity has not imported the font yet.
-- Confirm MainSceneUI background, paper, tab button, ship, seal, and letter visuals appear where imported Resources assets are available.
-- Confirm contract IDs are displayed exactly as `C001`, `C002`, and `C003`.
-- Confirm a fixture marker is visible for each current case.
+- Confirm MainSceneUI background, bell, paper, tab button, contractor, speech bubble, and letter visuals appear where imported Resources assets are available.
+- Confirm the normal entry/review UI does not show a contract list, current-contract detail paper, fixture marker, or internal document IDs.
 - Confirm document data appears as paper-style document cards for each contract.
 - Confirm missing registration is visible and emphasized for `C002`.
-- Confirm rule checklist uses exact rule IDs such as `AR01` and `CR01`.
-- Confirm hidden `AccidentFlag` is not shown in the normal contract panel.
+- Confirm rule checklist rows show reason names only, not `AR01`, `AR02`, `AR03`, `AR04`, `CR01`, or other source IDs.
+- Confirm hidden `AccidentFlag` is not shown in entry, review, document cards, rule checklist, or result UI.
 - For `C001`, click `승인` with no checked rules and expect correct approval.
-- After submitting `C001`, confirm the UI does not auto-advance and requires `다음 계약`.
-- For `C002`, check `AR01` and click `거절`. Expect no active contract and no regular accident.
+- After submitting `C001`, confirm the UI does not auto-advance and accepts either the visible continue control or document-board click for progression.
+- For `C002`, check the visible absolute rejection reason for missing registration and click `거절`. Expect no active contract and no regular accident.
 - After submitting `C002`, confirm the result panel says no active contract was created.
-- For `C003`, check `CR01` and `CR02`, click `승인`, and expect a 150 percent premium quote plus deterministic accident outcome.
+- For `C003`, check the visible consideration reasons for old hull and accident history, click `승인`, and expect a 150 percent premium quote plus deterministic accident outcome.
 - After submitting `C003`, confirm the continue button changes to `종료`.
 - Confirm settlement/evaluation feedback appears after each submit.
 - Confirm the session reaches a complete state after the third contract.
@@ -110,7 +109,7 @@ Use this in the next manual visual QA pass:
 - Confirm the right shelf is split into AR and CR sections.
 - Confirm clicking the lower-right final decision box raises the decision drawer from the bottom.
 - Confirm the drawer places `거절` on the left and `승인`/`조건부 승인` on the right.
-- For `C003`, check `CR01` and `CR02`; confirm the drawer approve label changes to `조건부 승인` and the Main-style drawer premium reads `120%`.
+- For `C003`, check the visible old-hull and accident-history consideration reasons; confirm the drawer approve label changes to `조건부 승인` and the Main-style drawer premium reads `120%`.
 - Confirm the submitted result still reports the application fixture premium quote and C001/C002/C003 flow remains correct.
 
 ## M8.11 Main UI Size/Image QA Addendum
@@ -121,3 +120,16 @@ Use this in the next manual visual QA pass:
 - Confirm the decision drawer is lower-right, narrower, taller, and uses `120x65` reject/approve tab buttons.
 - Confirm the decision drawer opens from the lower-right Main-like closed position and does not cover the AR/CR shelf.
 - Confirm exact Main PNG assets appear where available; `.aseprite` shelf/table art is still an acknowledged fallback.
+
+## M8.12 Entry HUD Dialogue Decision QA Addendum
+
+- Confirm the initial composition is bright enough and shows bell, document, and contractor preview near the center.
+- Confirm clicking the bell or document starts the contractor/review sequence.
+- Confirm the contractor starts smaller/darker/faded and settles brighter/larger.
+- Confirm the dialogue panel is large, upper-left, and advances lines when clicked.
+- Confirm clicking `인수 결정서` opens the lower-right decision paper and clicking it again closes the paper.
+- Confirm the decision paper has `거절` on the left and `승인` or `조건부 승인` on the right.
+- Confirm selected reason summary appears inside a lower white paper-like area.
+- Confirm approving a contract increases HUD ducats by floor 1% of the submitted premium and updates reputation from settlement score.
+- Confirm after approve/reject, the contractor exits; then document-board click progresses to the next contract.
+- Confirm source IDs remain exact internally but are not displayed in normal document/rule labels.

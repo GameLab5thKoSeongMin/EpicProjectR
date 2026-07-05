@@ -24,7 +24,7 @@ namespace EpicProjectR.Presentation
         public Font BodyFont { get; }
         public Color DeskBackground => new Color(0.075f, 0.105f, 0.1f, 1f);
         public Color MainBackdrop => new Color(0.035f, 0.032f, 0.028f, 1f);
-        public Color MainOverlay => new Color(0.02f, 0.018f, 0.014f, 0.42f);
+        public Color MainOverlay => new Color(0.02f, 0.018f, 0.014f, 0.12f);
         public Color TopStrip => new Color(0.06f, 0.05f, 0.042f, 0.92f);
         public Color HeaderPanel => new Color(0.115f, 0.17f, 0.15f, 0.98f);
         public Color WorkPanel => new Color(0.18f, 0.135f, 0.09f, 0.92f);

@@ -12,18 +12,17 @@ namespace EpicProjectR.Presentation
         public const string ContractDocketTitle = "계약 목록";
         public const string CurrentCaseTitle = "현재 계약";
         public const string DocumentBundleTitle = "제출 서류";
-        public const string RuleChecklistTitle = "AR / CR 심사 항목";
-        public const string AbsoluteRuleSectionTitle = "AR 즉시 거절";
-        public const string ConsiderationRuleSectionTitle = "CR 조건 검토";
+        public const string AbsoluteRuleSectionTitle = "절대 거절 사유";
+        public const string ConsiderationRuleSectionTitle = "거절 고려 사유";
         public const string ApproveButton = "승인";
         public const string ConditionalApproveButton = "조건부 승인";
         public const string RejectButton = "거절";
         public const string NextContractButton = "다음 계약";
         public const string FinishButton = "종료";
         public const string EntryDocumentTitle = "심사 서류 도착";
-        public const string EntryPrompt = "서류를 클릭해 계약 검토를 시작하세요.";
+        public const string EntryPrompt = "종을 울리거나 서류를 눌러 다음 신청인을 맞이하세요.";
         public const string DialogueReviewIntro = "신청인이 도착했습니다. 서류를 살피고 AR/CR 사유를 표시하세요.";
-        public const string DecisionBoxTitle = "최종 결재";
+        public const string DecisionBoxTitle = "인수 결정서";
         public const string DecisionBoxPrompt = "판단서를 올려 결정을 제출합니다.";
         public const string DecisionDrawerTitle = "인수 결정서";
         public const string DecisionDrawerPrompt = "왼쪽은 거절, 오른쪽은 승인입니다.";
@@ -44,6 +43,16 @@ namespace EpicProjectR.Presentation
         public static string CompleteHeader()
         {
             return "턴 1  |  날짜 1599-01-15  |  fixture 세션 완료";
+        }
+
+        public static string HudDate(GameDate date)
+        {
+            return $"{date.Year:0000}년 {date.Month:00}월 {date.Day:00}일";
+        }
+
+        public static string HudLedger(int ducats, int reputation)
+        {
+            return $"두카트 {ducats}\n평판 {reputation}";
         }
 
         public static string ReviewingStatus()
@@ -97,7 +106,7 @@ namespace EpicProjectR.Presentation
 
         public static string ActiveRuleStatus(int activeRuleCount)
         {
-            return $"현재 계약에 적용되는 fixture 심사 기준 {activeRuleCount}개입니다. 서류로 확인되는 항목만 표시하세요.";
+            return $"서류에서 확인되는 심사 사유 {activeRuleCount}개";
         }
 
         public static string MainLoopPremium(int selectedConsiderationCount)
@@ -105,10 +114,10 @@ namespace EpicProjectR.Presentation
             var percent = FirstPlayableMainLoopState.PremiumPercentForSelectedConsiderations(selectedConsiderationCount);
             if (selectedConsiderationCount == 0)
             {
-                return $"Main 방식 보험료: {percent}%";
+                return $"적용 보험료: {percent}%";
             }
 
-            return $"Main 방식 보험료: {percent}%  |  CR {selectedConsiderationCount}개 선택, 각 +10%";
+            return $"적용 보험료: {percent}%  |  고려 사유 {selectedConsiderationCount}개";
         }
 
         public static string SelectedReasonSummary(int selectedAbsoluteCount, int selectedConsiderationCount)
@@ -118,7 +127,7 @@ namespace EpicProjectR.Presentation
                 return NoSelectedReasons;
             }
 
-            return $"선택 사유: AR {selectedAbsoluteCount}개, CR {selectedConsiderationCount}개";
+            return $"선택 사유: 절대 거절 {selectedAbsoluteCount}개, 거절 고려 {selectedConsiderationCount}개";
         }
 
         public static string SessionCompleteStatus()
@@ -141,7 +150,13 @@ namespace EpicProjectR.Presentation
         public static string SubmittedPremium(int multiplierPercent, bool rejectRecommended, string considerationIds)
         {
             var recommendation = rejectRecommended ? "CR 누적으로 거절 권고." : "AR 차단 사유가 없으면 인수 진행 가능.";
-            return $"보험료 제안: {multiplierPercent}%  |  CR 사유 {considerationIds}. {recommendation}";
+            return $"보험료 제안: {multiplierPercent}%  |  고려 사유 {considerationIds}. {recommendation}";
+        }
+
+        public static string SubmittedPremium(int multiplierPercent, bool rejectRecommended, int considerationCount)
+        {
+            var recommendation = rejectRecommended ? "고려 사유 누적으로 거절 권고." : "절대 거절 사유가 없으면 인수 진행 가능.";
+            return $"보험료 제안: {multiplierPercent}%  |  고려 사유 {considerationCount}개. {recommendation}";
         }
 
         public static string AuditResult(DecisionAuditResult audit, string correctIds, string missedIds, string extraIds)
@@ -191,9 +206,15 @@ namespace EpicProjectR.Presentation
             return document.Submitted ? title : $"{title} (미제출)";
         }
 
-        public static string DocumentStatus(bool submitted)
+        public static string[] DialogueLines(ContractCase contractCase)
         {
-            return submitted ? "제출됨 / 심사 가능" : "미제출";
+            var applicant = contractCase != null ? contractCase.ApplicantName : "신청인";
+            return new[]
+            {
+                $"{applicant} 님이 접수대 앞에 섰습니다.",
+                "제출된 서류의 이름, 날짜, 항로를 차례대로 확인해 주세요.",
+                "사유가 보이면 오른쪽 판에 표시하고, 인수 결정서를 열어 결정을 제출하세요."
+            };
         }
 
         public static string MissingDocumentMessage()
