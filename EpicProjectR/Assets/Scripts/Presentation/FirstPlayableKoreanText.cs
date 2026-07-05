@@ -13,10 +13,21 @@ namespace EpicProjectR.Presentation
         public const string CurrentCaseTitle = "현재 계약";
         public const string DocumentBundleTitle = "제출 서류";
         public const string RuleChecklistTitle = "AR / CR 심사 항목";
+        public const string AbsoluteRuleSectionTitle = "AR 즉시 거절";
+        public const string ConsiderationRuleSectionTitle = "CR 조건 검토";
         public const string ApproveButton = "승인";
+        public const string ConditionalApproveButton = "조건부 승인";
         public const string RejectButton = "거절";
         public const string NextContractButton = "다음 계약";
         public const string FinishButton = "종료";
+        public const string EntryDocumentTitle = "심사 서류 도착";
+        public const string EntryPrompt = "서류를 클릭해 계약 검토를 시작하세요.";
+        public const string DialogueReviewIntro = "신청인이 도착했습니다. 서류를 살피고 AR/CR 사유를 표시하세요.";
+        public const string DecisionBoxTitle = "최종 결재";
+        public const string DecisionBoxPrompt = "판단서를 올려 결정을 제출합니다.";
+        public const string DecisionDrawerTitle = "인수 결정서";
+        public const string DecisionDrawerPrompt = "왼쪽은 거절, 오른쪽은 승인입니다.";
+        public const string NoSelectedReasons = "선택된 사유 없음";
         public const string ReviewWaitingAudit = "판단 평가: 결정을 기다리는 중입니다.";
         public const string ReviewWaitingOutcome = "계약 결과: 아직 제출된 결정이 없습니다.";
         public const string ReviewWaitingSettlement = "정산: 아직 정산 항목이 없습니다.";
@@ -87,6 +98,27 @@ namespace EpicProjectR.Presentation
         public static string ActiveRuleStatus(int activeRuleCount)
         {
             return $"현재 계약에 적용되는 fixture 심사 기준 {activeRuleCount}개입니다. 서류로 확인되는 항목만 표시하세요.";
+        }
+
+        public static string MainLoopPremium(int selectedConsiderationCount)
+        {
+            var percent = FirstPlayableMainLoopState.PremiumPercentForSelectedConsiderations(selectedConsiderationCount);
+            if (selectedConsiderationCount == 0)
+            {
+                return $"Main 방식 보험료: {percent}%";
+            }
+
+            return $"Main 방식 보험료: {percent}%  |  CR {selectedConsiderationCount}개 선택, 각 +10%";
+        }
+
+        public static string SelectedReasonSummary(int selectedAbsoluteCount, int selectedConsiderationCount)
+        {
+            if (selectedAbsoluteCount == 0 && selectedConsiderationCount == 0)
+            {
+                return NoSelectedReasons;
+            }
+
+            return $"선택 사유: AR {selectedAbsoluteCount}개, CR {selectedConsiderationCount}개";
         }
 
         public static string SessionCompleteStatus()

@@ -1,6 +1,6 @@
 # First Playable QA Guide
 
-Last updated: 2026-07-05.
+Last updated: 2026-07-06.
 
 ## How To Run
 
@@ -8,7 +8,7 @@ Last updated: 2026-07-05.
 2. Open `Assets/Scenes/SampleScene.unity`.
 3. Press Play.
 4. A runtime-generated `First Playable Canvas` should appear automatically.
-5. The UI should use a Main-scene-inspired layout with a full-screen background, top date/status strip, left paper contract docket, central workbench document area, right shelf-style AR/CR checklist, and bottom-right decision/result paper.
+5. The UI should open on a clickable Main-scene-style incoming contract paper. After clicking it, the review layout should appear with a full-screen background, top date/status strip, left paper contract docket, lower-left dialogue/contractor area, central draggable document workbench, right split AR/CR checklist, lower-right decision box, and bottom decision drawer.
 
 No scene or prefab needs to be manually wired for this pass.
 
@@ -61,7 +61,7 @@ The fixture session contains 3 ship insurance contracts:
 - Imported reference sprites are loaded build-safely from `Assets/Resources/FirstPlayable/ImportedReference/RuntimeSafe/`, but final sprite import settings and slicing have not been visually tuned.
 - Contract map, claim sheet, after-story, cargo, mixed contracts, and full economy are not implemented.
 - The three contracts are fixtures, not final 168-contract data.
-- Conditional approval is modeled but not exposed in the first UI.
+- Conditional approval is exposed only through the decision drawer when one or more CR rows are checked.
 - Some internal fixture data remains English in source code, but normal UI presentation should map it into Korean.
 
 ## Bug Report Notes For Next Pass
@@ -100,3 +100,24 @@ Use this in the next manual visual QA pass:
 - Confirm `승인` and `거절` use compact tab-like button art when MainSceneUI Resources assets import successfully.
 - Confirm missing optional MainSceneUI sprites fall back to readable generated colors rather than throwing exceptions.
 - Confirm Korean text remains readable over the darker background and paper panels.
+
+## M8.9 Main Runtime Loop QA Addendum
+
+- Confirm the initial screen shows a clickable contract/document entry state before the review panels appear.
+- Confirm clicking the entry paper starts the review sequence.
+- Confirm the dialogue/contractor, workstation, docket, and AR/CR shelf slide into view.
+- Confirm generated documents can be dragged with the mouse and stay inside the workstation bounds.
+- Confirm the right shelf is split into AR and CR sections.
+- Confirm clicking the lower-right final decision box raises the decision drawer from the bottom.
+- Confirm the drawer places `거절` on the left and `승인`/`조건부 승인` on the right.
+- For `C003`, check `CR01` and `CR02`; confirm the drawer approve label changes to `조건부 승인` and the Main-style drawer premium reads `120%`.
+- Confirm the submitted result still reports the application fixture premium quote and C001/C002/C003 flow remains correct.
+
+## M8.11 Main UI Size/Image QA Addendum
+
+- Confirm the right shelf is taller and narrower, matching the old Main shelf region rather than the previous compact panel.
+- Confirm the central workstation occupies the measured Main display area and document drag feels bounded to that work surface.
+- Confirm document cards are taller, closer to old document prefab proportions.
+- Confirm the decision drawer is lower-right, narrower, taller, and uses `120x65` reject/approve tab buttons.
+- Confirm the decision drawer opens from the lower-right Main-like closed position and does not cover the AR/CR shelf.
+- Confirm exact Main PNG assets appear where available; `.aseprite` shelf/table art is still an acknowledged fallback.

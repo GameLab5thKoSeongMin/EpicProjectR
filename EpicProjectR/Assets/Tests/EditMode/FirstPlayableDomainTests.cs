@@ -145,6 +145,15 @@ namespace EpicProjectR.Tests.EditMode
         }
 
         [Test]
+        public void MainLoopPresentationPremiumUsesTenPercentPerSelectedConsideration()
+        {
+            Assert.AreEqual(FirstPlayableScreenMode.Entry, FirstPlayableScreenMode.Entry);
+            Assert.AreEqual(100, FirstPlayableMainLoopState.PremiumPercentForSelectedConsiderations(0));
+            Assert.AreEqual(120, FirstPlayableMainLoopState.PremiumPercentForSelectedConsiderations(2));
+            Assert.AreEqual(FirstPlayableKoreanText.ConditionalApproveButton, FirstPlayableMainLoopState.ApprovalLabelForSelectedConsiderations(1));
+        }
+
+        [Test]
         public void KoreanOutcomeTextDoesNotExposeHiddenAccidentFlagName()
         {
             var outcome = new OutcomeResult(new OutcomeId("OUT-C003"), new ContractId("C003"), true, "Accident occurred on return. The hidden fixture AccidentFlag resolved deterministically.");

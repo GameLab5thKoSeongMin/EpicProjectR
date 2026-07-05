@@ -14,7 +14,7 @@ namespace EpicProjectR.Presentation
         private readonly IReadOnlyList<ContractCase> allContracts;
         private readonly IReadOnlyList<RuleDefinition> allRules;
         private readonly FirstPlayableView view;
-        private FirstPlayableScreenMode currentMode = FirstPlayableScreenMode.Reviewing;
+        private FirstPlayableScreenMode currentMode = FirstPlayableScreenMode.Entry;
 
         public FirstPlayablePresenter(
             FirstPlayableSession session,
@@ -26,6 +26,8 @@ namespace EpicProjectR.Presentation
             this.allContracts = allContracts ?? throw new ArgumentNullException(nameof(allContracts));
             this.allRules = allRules ?? throw new ArgumentNullException(nameof(allRules));
             this.view = view ?? throw new ArgumentNullException(nameof(view));
+            view.ReviewStarted += StartReview;
+            view.DecisionDrawerRequested += OpenDecisionDrawer;
             view.DecisionSubmitted += SubmitDecision;
             view.ResultAcknowledged += AdvanceAfterResult;
         }
@@ -45,6 +47,42 @@ namespace EpicProjectR.Presentation
                 return;
             }
 
+            currentMode = FirstPlayableScreenMode.Entry;
+            var current = session.CurrentContract;
+            view.RenderEntry(new FirstPlayableEntryScreenState(
+                FirstPlayableKoreanText.HeaderMeta(session.TurnDefinition.TurnNumber, session.TurnDefinition.Date, current.Id, FirstPlayableKoreanText.ReviewingStatus()),
+                RenderDocket(),
+                FirstPlayableKoreanText.CaseSummary(current),
+                FirstPlayableKoreanText.EntryDocumentTitle,
+                FirstPlayableKoreanText.EntryPrompt));
+        }
+
+        public void StartReview()
+        {
+            if (session.IsComplete || currentMode != FirstPlayableScreenMode.Entry)
+            {
+                return;
+            }
+
+            currentMode = FirstPlayableScreenMode.OpeningReview;
+            RenderReview();
+            currentMode = FirstPlayableScreenMode.Reviewing;
+        }
+
+        public void OpenDecisionDrawer()
+        {
+            if (session.IsComplete || currentMode != FirstPlayableScreenMode.Reviewing)
+            {
+                return;
+            }
+
+            currentMode = FirstPlayableScreenMode.DecisionDrawerOpening;
+            view.OpenDecisionDrawer();
+            currentMode = FirstPlayableScreenMode.DecisionReady;
+        }
+
+        private void RenderReview()
+        {
             currentMode = FirstPlayableScreenMode.Reviewing;
             var current = session.CurrentContract;
             var review = session.CurrentReview();
@@ -66,7 +104,7 @@ namespace EpicProjectR.Presentation
 
         public void SubmitDecision(PlayerDecision decision, IReadOnlyList<RuleId> checkedRuleIds)
         {
-            if (session.IsComplete || currentMode != FirstPlayableScreenMode.Reviewing)
+            if (session.IsComplete || currentMode != FirstPlayableScreenMode.DecisionReady)
             {
                 return;
             }

@@ -28,6 +28,9 @@ namespace EpicProjectR.Presentation
         private const string MainApproveTabPath = "FirstPlayable/ImportedReference/RuntimeSafe/MainSceneUI/UI/ui_tab_dim";
         private const string MainRejectTabPath = "FirstPlayable/ImportedReference/RuntimeSafe/MainSceneUI/UI/ui_tab_off";
         private const string MainSmallButtonPath = "FirstPlayable/ImportedReference/RuntimeSafe/MainSceneUI/UI/ui_btn_icon_x";
+        private const string MainContractorPath = "FirstPlayable/ImportedReference/RuntimeSafe/MainSceneUI/Characters/contractor_temp";
+        private const string MainSpeechBubblePath = "FirstPlayable/ImportedReference/RuntimeSafe/MainSceneUI/UI/speech_bubble";
+        private const string MainBellPath = "FirstPlayable/ImportedReference/RuntimeSafe/MainSceneUI/UI/bell_full";
 
         private FirstPlayableAssetCatalog(
             Font titleFont,
@@ -45,7 +48,10 @@ namespace EpicProjectR.Presentation
             Sprite mainLetterSprite,
             Sprite mainApproveTabSprite,
             Sprite mainRejectTabSprite,
-            Sprite mainSmallButtonSprite)
+            Sprite mainSmallButtonSprite,
+            Sprite mainContractorSprite,
+            Sprite mainSpeechBubbleSprite,
+            Sprite mainBellSprite)
         {
             TitleFont = titleFont ?? throw new ArgumentNullException(nameof(titleFont));
             BodyFont = bodyFont ?? throw new ArgumentNullException(nameof(bodyFont));
@@ -63,6 +69,9 @@ namespace EpicProjectR.Presentation
             MainApproveTabSprite = mainApproveTabSprite;
             MainRejectTabSprite = mainRejectTabSprite;
             MainSmallButtonSprite = mainSmallButtonSprite;
+            MainContractorSprite = mainContractorSprite;
+            MainSpeechBubbleSprite = mainSpeechBubbleSprite;
+            MainBellSprite = mainBellSprite;
         }
 
         public Font TitleFont { get; }
@@ -81,6 +90,9 @@ namespace EpicProjectR.Presentation
         public Sprite MainApproveTabSprite { get; }
         public Sprite MainRejectTabSprite { get; }
         public Sprite MainSmallButtonSprite { get; }
+        public Sprite MainContractorSprite { get; }
+        public Sprite MainSpeechBubbleSprite { get; }
+        public Sprite MainBellSprite { get; }
 
         public static FirstPlayableAssetCatalog Load()
         {
@@ -100,7 +112,10 @@ namespace EpicProjectR.Presentation
                 LoadSprite(MainLetterPath, "main-scene-letter"),
                 LoadSprite(MainApproveTabPath, "main-scene-approve-tab"),
                 LoadSprite(MainRejectTabPath, "main-scene-reject-tab"),
-                LoadSprite(MainSmallButtonPath, "main-scene-small-button"));
+                LoadSprite(MainSmallButtonPath, "main-scene-small-button"),
+                LoadSprite(MainContractorPath, "main-scene-contractor"),
+                LoadSprite(MainSpeechBubblePath, "main-scene-speech-bubble"),
+                LoadSprite(MainBellPath, "main-scene-bell"));
         }
 
         private static Font LoadFont(string resourcesPath, string[] fallbackResourcePaths, string[] fallbackNames, int fallbackSize)

@@ -9,7 +9,11 @@ namespace EpicProjectR.Presentation
 {
     public enum FirstPlayableScreenMode
     {
+        Entry,
+        OpeningReview,
         Reviewing,
+        DecisionDrawerOpening,
+        DecisionReady,
         Result,
         Completed
     }
@@ -24,6 +28,31 @@ namespace EpicProjectR.Presentation
 
         public RuleDefinition Rule { get; }
         public bool IsTriggered { get; }
+    }
+
+    public sealed class FirstPlayableEntryScreenState
+    {
+        public FirstPlayableEntryScreenState(
+            string headerMeta,
+            string docket,
+            string caseSummary,
+            string entryTitle,
+            string entryPrompt)
+        {
+            Mode = FirstPlayableScreenMode.Entry;
+            HeaderMeta = headerMeta ?? throw new ArgumentNullException(nameof(headerMeta));
+            Docket = docket ?? throw new ArgumentNullException(nameof(docket));
+            CaseSummary = caseSummary ?? throw new ArgumentNullException(nameof(caseSummary));
+            EntryTitle = entryTitle ?? throw new ArgumentNullException(nameof(entryTitle));
+            EntryPrompt = entryPrompt ?? throw new ArgumentNullException(nameof(entryPrompt));
+        }
+
+        public FirstPlayableScreenMode Mode { get; }
+        public string HeaderMeta { get; }
+        public string Docket { get; }
+        public string CaseSummary { get; }
+        public string EntryTitle { get; }
+        public string EntryPrompt { get; }
     }
 
     public sealed class FirstPlayableReviewScreenState
