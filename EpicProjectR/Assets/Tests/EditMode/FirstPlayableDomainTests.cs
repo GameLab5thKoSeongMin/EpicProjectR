@@ -147,7 +147,7 @@ namespace EpicProjectR.Tests.EditMode
         [Test]
         public void MainLoopPresentationPremiumUsesTenPercentPerSelectedConsideration()
         {
-            Assert.AreEqual(FirstPlayableScreenMode.Entry, FirstPlayableScreenMode.Entry);
+            Assert.AreEqual(FirstPlayableScreenMode.MainWaitingForBell, FirstPlayableScreenMode.MainWaitingForBell);
             Assert.AreEqual(100, FirstPlayableMainLoopState.PremiumPercentForSelectedConsiderations(0));
             Assert.AreEqual(120, FirstPlayableMainLoopState.PremiumPercentForSelectedConsiderations(2));
             Assert.AreEqual(FirstPlayableKoreanText.ConditionalApproveButton, FirstPlayableMainLoopState.ApprovalLabelForSelectedConsiderations(1));

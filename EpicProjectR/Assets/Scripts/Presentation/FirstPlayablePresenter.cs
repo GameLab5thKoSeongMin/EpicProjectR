@@ -17,7 +17,7 @@ namespace EpicProjectR.Presentation
         private readonly HashSet<ContractId> incentivizedContracts = new HashSet<ContractId>();
         private int officeDucats;
         private int reputation;
-        private FirstPlayableScreenMode currentMode = FirstPlayableScreenMode.Entry;
+        private FirstPlayableScreenMode currentMode = FirstPlayableScreenMode.MainWaitingForBell;
 
         public FirstPlayablePresenter(
             FirstPlayableSession session,
@@ -29,11 +29,12 @@ namespace EpicProjectR.Presentation
             this.allContracts = allContracts ?? throw new ArgumentNullException(nameof(allContracts));
             this.allRules = allRules ?? throw new ArgumentNullException(nameof(allRules));
             this.view = view ?? throw new ArgumentNullException(nameof(view));
-            view.ReviewStarted += StartReview;
+            view.BellRang += StartCharacterArrival;
+            view.CharacterArrivalCompleted += CompleteCharacterArrival;
+            view.PresentedDocumentClicked += OnPresentedDocumentClicked;
             view.DecisionDrawerRequested += OpenDecisionDrawer;
             view.DecisionSubmitted += SubmitDecision;
-            view.ReviewClosedRequested += CloseReviewToEntry;
-            view.ResultAcknowledged += AdvanceAfterResult;
+            view.CharacterExitCompleted += CompleteCharacterExit;
         }
 
         public FirstPlayableScreenMode CurrentMode => currentMode;
@@ -51,7 +52,7 @@ namespace EpicProjectR.Presentation
                 return;
             }
 
-            currentMode = FirstPlayableScreenMode.Entry;
+            currentMode = FirstPlayableScreenMode.MainWaitingForBell;
             var current = session.CurrentContract;
             view.RenderEntry(new FirstPlayableEntryScreenState(
                 FirstPlayableKoreanText.HeaderMeta(session.TurnDefinition.TurnNumber, session.TurnDefinition.Date, current.Id, FirstPlayableKoreanText.ReviewingStatus()),
@@ -62,9 +63,51 @@ namespace EpicProjectR.Presentation
             view.RenderHud(CreateHudState());
         }
 
+        public void StartCharacterArrival()
+        {
+            if (session.IsComplete || currentMode != FirstPlayableScreenMode.MainWaitingForBell)
+            {
+                return;
+            }
+
+            currentMode = FirstPlayableScreenMode.CharacterArriving;
+            view.PlayEntryCharacterArrival();
+        }
+
+        public void CompleteCharacterArrival()
+        {
+            if (session.IsComplete || currentMode != FirstPlayableScreenMode.CharacterArriving)
+            {
+                return;
+            }
+
+            currentMode = FirstPlayableScreenMode.DocumentPresented;
+            view.RenderDocumentPresented();
+        }
+
+        public void OnPresentedDocumentClicked()
+        {
+            if (session.IsComplete)
+            {
+                return;
+            }
+
+            if (currentMode == FirstPlayableScreenMode.DocumentPresented)
+            {
+                StartReview();
+                return;
+            }
+
+            if (currentMode == FirstPlayableScreenMode.Reviewing ||
+                currentMode == FirstPlayableScreenMode.DecisionPaperOpen)
+            {
+                CloseReviewToPresentedDocument();
+            }
+        }
+
         public void StartReview()
         {
-            if (session.IsComplete || currentMode != FirstPlayableScreenMode.Entry)
+            if (session.IsComplete || currentMode != FirstPlayableScreenMode.DocumentPresented)
             {
                 return;
             }
@@ -81,7 +124,7 @@ namespace EpicProjectR.Presentation
                 return;
             }
 
-            if (currentMode == FirstPlayableScreenMode.DecisionReady)
+            if (currentMode == FirstPlayableScreenMode.DecisionPaperOpen)
             {
                 view.CloseDecisionDrawer();
                 currentMode = FirstPlayableScreenMode.Reviewing;
@@ -95,17 +138,19 @@ namespace EpicProjectR.Presentation
 
             currentMode = FirstPlayableScreenMode.DecisionDrawerOpening;
             view.OpenDecisionDrawer();
-            currentMode = FirstPlayableScreenMode.DecisionReady;
+            currentMode = FirstPlayableScreenMode.DecisionPaperOpen;
         }
 
-        public void CloseReviewToEntry()
+        public void CloseReviewToPresentedDocument()
         {
-            if (currentMode != FirstPlayableScreenMode.Reviewing && currentMode != FirstPlayableScreenMode.DecisionReady)
+            if (currentMode != FirstPlayableScreenMode.Reviewing && currentMode != FirstPlayableScreenMode.DecisionPaperOpen)
             {
                 return;
             }
 
-            ShowCurrentCase();
+            currentMode = FirstPlayableScreenMode.DocumentPresented;
+            view.RenderDocumentPresented();
+            view.RenderHud(CreateHudState());
         }
 
         private void RenderReview()
@@ -116,6 +161,7 @@ namespace EpicProjectR.Presentation
             var triggered = new HashSet<RuleId>(review.Triggers.Select(trigger => trigger.RuleId));
             var activeRules = allRules
                 .Where(rule => rule.Windows.Any(window => window.IsActiveFor(current)))
+                .Where(rule => triggered.Contains(rule.Id))
                 .Select(rule => new FirstPlayableRuleRowState(rule, triggered.Contains(rule.Id)))
                 .ToList();
 
@@ -125,6 +171,7 @@ namespace EpicProjectR.Presentation
                 FirstPlayableKoreanText.CaseSummary(current),
                 FirstPlayableKoreanText.ActiveRuleStatus(activeRules.Count),
                 FirstPlayableKoreanText.PreSubmitPremium(review.ConsiderationCount),
+                FirstPlayableKoreanText.DecisionCompensation(current.Coverage),
                 FirstPlayableKoreanText.DialogueLines(current),
                 current.Documents,
                 activeRules));
@@ -133,20 +180,20 @@ namespace EpicProjectR.Presentation
 
         public void SubmitDecision(PlayerDecision decision, IReadOnlyList<RuleId> checkedRuleIds)
         {
-            if (session.IsComplete || currentMode != FirstPlayableScreenMode.DecisionReady)
+            if (session.IsComplete || currentMode != FirstPlayableScreenMode.DecisionPaperOpen)
             {
                 return;
             }
 
             var contract = session.CurrentContract;
             var result = session.Submit(decision, checkedRuleIds);
-            ApplyLedger(result, contract);
+            ApplyLedger(result, contract, checkedRuleIds);
             ShowResult(result);
         }
 
-        public void AdvanceAfterResult()
+        public void CompleteCharacterExit()
         {
-            if (currentMode != FirstPlayableScreenMode.Result)
+            if (currentMode != FirstPlayableScreenMode.CharacterExiting)
             {
                 return;
             }
@@ -156,7 +203,7 @@ namespace EpicProjectR.Presentation
 
         private void ShowResult(SubmissionResult result)
         {
-            currentMode = FirstPlayableScreenMode.Result;
+            currentMode = FirstPlayableScreenMode.DecisionSubmitted;
 
             view.RenderResult(new FirstPlayableResultScreenState(
                 ResultHeaderMeta(result.Audit.ContractId),
@@ -167,6 +214,7 @@ namespace EpicProjectR.Presentation
                 session.IsComplete ? FirstPlayableKoreanText.FinishButton : FirstPlayableKoreanText.NextContractButton,
                 result.Audit.IsCorrectAction,
                 result.Outcome.AccidentOccurred));
+            currentMode = FirstPlayableScreenMode.CharacterExiting;
             view.RenderHud(CreateHudState());
         }
 
@@ -194,7 +242,7 @@ namespace EpicProjectR.Presentation
                 reputation);
         }
 
-        private void ApplyLedger(SubmissionResult result, ContractCase contract)
+        private void ApplyLedger(SubmissionResult result, ContractCase contract, IReadOnlyList<RuleId> checkedRuleIds)
         {
             if (result == null || contract == null)
             {
@@ -208,7 +256,11 @@ namespace EpicProjectR.Presentation
                 return;
             }
 
-            var finalPremium = contract.BasePremium.Ducats * result.Premium.MultiplierPercent / 100;
+            var selectedConsiderations = checkedRuleIds == null
+                ? 0
+                : checkedRuleIds.Count(id => allRules.Any(rule => rule.Id.Equals(id) && rule.Severity == RuleSeverity.RejectionConsideration));
+            var multiplierPercent = FirstPlayableMainLoopState.PremiumPercentForSelectedConsiderations(selectedConsiderations);
+            var finalPremium = contract.BasePremium.Ducats * multiplierPercent / 100;
             var incentive = finalPremium / 100;
             officeDucats += incentive;
             incentivizedContracts.Add(contract.Id);

@@ -1,5 +1,6 @@
 // Responsibility: Loads first playable fonts and imported reference sprites through build-safe Resources paths.
 using System;
+using System.IO;
 using UnityEngine;
 
 namespace EpicProjectR.Presentation
@@ -31,6 +32,7 @@ namespace EpicProjectR.Presentation
         private const string MainContractorPath = "FirstPlayable/ImportedReference/RuntimeSafe/MainSceneUI/Characters/contractor_temp";
         private const string MainSpeechBubblePath = "FirstPlayable/ImportedReference/RuntimeSafe/MainSceneUI/UI/speech_bubble";
         private const string MainBellPath = "FirstPlayable/ImportedReference/RuntimeSafe/MainSceneUI/UI/bell_full";
+        private const string RequiredMainBackgroundFileName = "\uBC30\uACBD\uD654\uBA74.png";
 
         private FirstPlayableAssetCatalog(
             Font titleFont,
@@ -106,7 +108,7 @@ namespace EpicProjectR.Presentation
                 LoadSprite(SealPath, "first-playable-seal"),
                 LoadSprite(RibbonPath, "first-playable-ribbon"),
                 LoadSprite(ShipPath, "first-playable-ship"),
-                LoadSprite(MainBackgroundPath, "main-scene-background"),
+                LoadRequiredMainBackgroundSprite() ?? LoadSprite(MainBackgroundPath, "main-scene-background"),
                 LoadSprite(MainPaperPath, "main-scene-paper"),
                 LoadSprite(MainPaperTexturePath, "main-scene-paper-texture"),
                 LoadSprite(MainLetterPath, "main-scene-letter"),
@@ -157,6 +159,46 @@ namespace EpicProjectR.Presentation
             var sprite = Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f), 100f);
             sprite.name = spriteName;
             return sprite;
+        }
+
+        private static Sprite LoadRequiredMainBackgroundSprite()
+        {
+            var repositoryPath = Path.GetFullPath(Path.Combine(UnityEngine.Application.dataPath, "..", "..", "using_image", RequiredMainBackgroundFileName));
+            var workingDirectoryPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "using_image", RequiredMainBackgroundFileName));
+            return LoadSpriteFromFile(repositoryPath, "required-main-background")
+                ?? LoadSpriteFromFile(workingDirectoryPath, "required-main-background");
+        }
+
+        private static Sprite LoadSpriteFromFile(string filePath, string spriteName)
+        {
+            if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
+            {
+                return null;
+            }
+
+            try
+            {
+                var bytes = File.ReadAllBytes(filePath);
+                var texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                if (!texture.LoadImage(bytes))
+                {
+                    return null;
+                }
+
+                texture.name = spriteName + "-texture";
+                var rect = new Rect(0f, 0f, texture.width, texture.height);
+                var sprite = Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f), 100f);
+                sprite.name = spriteName;
+                return sprite;
+            }
+            catch (IOException)
+            {
+                return null;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return null;
+            }
         }
     }
 }

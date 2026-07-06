@@ -1,4 +1,5 @@
 // Responsibility: Runs simple runtime UI tweens for the first playable passive view.
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,6 +50,16 @@ namespace EpicProjectR.Presentation
 
             target.color = from;
             StartCoroutine(TintRoutine(target, to, Mathf.Max(0f, duration)));
+        }
+
+        public void InvokeAfter(float delaySeconds, Action action)
+        {
+            if (action == null)
+            {
+                return;
+            }
+
+            StartCoroutine(InvokeAfterRoutine(Mathf.Max(0f, delaySeconds), action));
         }
 
         private static IEnumerator MoveRoutine(RectTransform target, Vector2 to, float duration)
@@ -141,6 +152,16 @@ namespace EpicProjectR.Presentation
             }
 
             target.color = to;
+        }
+
+        private static IEnumerator InvokeAfterRoutine(float delaySeconds, Action action)
+        {
+            if (delaySeconds > 0f)
+            {
+                yield return new WaitForSeconds(delaySeconds);
+            }
+
+            action();
         }
     }
 }

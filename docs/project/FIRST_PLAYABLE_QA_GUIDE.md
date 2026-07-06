@@ -8,7 +8,7 @@ Last updated: 2026-07-06.
 2. Open `Assets/Scenes/SampleScene.unity`.
 3. Press Play.
 4. A runtime-generated `First Playable Canvas` should appear automatically.
-5. The UI should open on a Main-scene-style bell/document/contractor entry composition. After clicking the bell or document, the review layout should appear with a full-screen background, top HUD, upper-left dialogue/contractor area, central draggable document workbench, right split AR/CR checklist, lower-right `인수 결정서`, and bottom decision drawer.
+5. The UI should open on a bright Main-scene-style bell/document entry composition with no character visible. Click the bell first, wait for the contractor to arrive, then click the presented document to enter review.
 
 No scene or prefab needs to be manually wired for this pass.
 
@@ -39,17 +39,23 @@ The fixture session contains 3 ship insurance contracts:
 - Confirm normal player-facing UI text is Korean.
 - Confirm the imported Noto Serif KR font is used for title/body text, or that the UI falls back to an OS font if Unity has not imported the font yet.
 - Confirm MainSceneUI background, bell, paper, tab button, contractor, speech bubble, and letter visuals appear where imported Resources assets are available.
+- Confirm the initial screen has no visible contractor, has a small document on the center-bottom table/blue cloth area, and has the bell to the left of the document.
+- Confirm clicking the bell starts contractor arrival, but does not open review.
+- Confirm clicking the presented document after arrival opens review.
+- Confirm clicking the presented document during review returns to the Main composition for the same pending contract.
+- Confirm clicking the workstation document area does not return to Main and does not advance after a decision.
 - Confirm the normal entry/review UI does not show a contract list, current-contract detail paper, fixture marker, or internal document IDs.
 - Confirm document data appears as paper-style document cards for each contract.
 - Confirm missing registration is visible and emphasized for `C002`.
-- Confirm rule checklist rows show reason names only, not `AR01`, `AR02`, `AR03`, `AR04`, `CR01`, or other source IDs.
+- Confirm rule checklist rows show only applicable reason names for the current case, not all possible reasons and not `AR01`, `AR02`, `AR03`, `AR04`, `CR01`, or other source IDs.
+- Confirm empty AR/CR sections are hidden.
 - Confirm hidden `AccidentFlag` is not shown in entry, review, document cards, rule checklist, or result UI.
 - For `C001`, click `승인` with no checked rules and expect correct approval.
-- After submitting `C001`, confirm the UI does not auto-advance and accepts either the visible continue control or document-board click for progression.
+- After submitting `C001`, confirm the contractor gives a short line, exits with the document, and the next contract waits on the Main composition for another bell click.
 - For `C002`, check the visible absolute rejection reason for missing registration and click `거절`. Expect no active contract and no regular accident.
-- After submitting `C002`, confirm the result panel says no active contract was created.
-- For `C003`, check the visible consideration reasons for old hull and accident history, click `승인`, and expect a 150 percent premium quote plus deterministic accident outcome.
-- After submitting `C003`, confirm the continue button changes to `종료`.
+- After submitting `C002`, confirm no ducat incentive is awarded and the next contract waits on the Main composition for another bell click.
+- For `C003`, check the visible consideration reasons for old hull and accident history, click `승인`, and expect the decision paper right button to change to `조건부 승인` with a 10% premium increase per selected CR.
+- After submitting `C003`, confirm the contractor exits, the document disappears, and the completed state appears.
 - Confirm settlement/evaluation feedback appears after each submit.
 - Confirm the session reaches a complete state after the third contract.
 
@@ -121,15 +127,31 @@ Use this in the next manual visual QA pass:
 - Confirm the decision drawer opens from the lower-right Main-like closed position and does not cover the AR/CR shelf.
 - Confirm exact Main PNG assets appear where available; `.aseprite` shelf/table art is still an acknowledged fallback.
 
-## M8.12 Entry HUD Dialogue Decision QA Addendum
+## M8.13 Corrected Main Loop QA Addendum
 
-- Confirm the initial composition is bright enough and shows bell, document, and contractor preview near the center.
-- Confirm clicking the bell or document starts the contractor/review sequence.
-- Confirm the contractor starts smaller/darker/faded and settles brighter/larger.
-- Confirm the dialogue panel is large, upper-left, and advances lines when clicked.
-- Confirm clicking `인수 결정서` opens the lower-right decision paper and clicking it again closes the paper.
-- Confirm the decision paper has `거절` on the left and `승인` or `조건부 승인` on the right.
-- Confirm selected reason summary appears inside a lower white paper-like area.
-- Confirm approving a contract increases HUD ducats by floor 1% of the submitted premium and updates reputation from settlement score.
-- Confirm after approve/reject, the contractor exits; then document-board click progresses to the next contract.
+- Confirm the initial composition is bright enough and shows only the small document and bell, with no character visible.
+- Confirm bell click starts arrival only: the contractor starts small/dark/faded and settles brighter/larger near the lower-left character area.
+- Confirm the bell becomes inactive/semi-transparent after arrival and the presented document remains clickable.
+- Confirm only the presented document opens review; the bell does not.
+- Confirm the top HUD remains visible and above all review panels.
+- Confirm the left review area is split into an upper scrollable chat log and lower character/document/bell composition.
+- Confirm dialogue clicks append lines to the chat log instead of replacing one speech bubble.
+- Confirm the center workstation is the largest area and documents remain draggable/clamped.
+- Confirm the right panel shows only applicable reasons and hides empty sections.
+- Confirm `인수 결정서` is a paper-like button, not a bell, and toggles the paper open/closed.
+- Confirm the open decision paper shows only `손해보상금`, `보험료`, `거절`, and `승인`/`조건부 승인`.
+- Confirm selected CR reasons increase premium by 10% each and do not change compensation.
+- Confirm approval/conditional approval awards floor 1% of final premium once per contract; rejection awards none.
+- Confirm after approve/reject, the contractor exits, the document disappears, and the next contract waits for another bell click.
 - Confirm source IDs remain exact internally but are not displayed in normal document/rule labels.
+
+## M8.18 1920x1080 Correction QA Addendum
+
+- Confirm the first screen uses `using_image/배경화면.png` and no longer appears overly dark.
+- Confirm the top HUD title is not clipped, the date is visually centered, and ducats/reputation are cleanly right-aligned at 1920x1080.
+- Confirm the contractor arrives from the center-bottom of the Main screen, then settles into the left-side visible position.
+- Confirm the review layout reads as left chat/character area, largest center workstation, and narrow right reason/decision panel.
+- Confirm the chat panel scrolls with the mouse wheel and still appends one small bubble at a time when clicked.
+- Confirm right-panel reason rows fit within the panel and show only applicable reason text, not source IDs.
+- Confirm the decision paper opens upward and closes downward when `?몄닔 寃곗젙?? is clicked again.
+- Confirm rapid open/close clicks do not leave the decision paper hidden while the presenter is in decision-open mode.

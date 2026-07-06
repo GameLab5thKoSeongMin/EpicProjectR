@@ -9,10 +9,16 @@ namespace EpicProjectR.Presentation
 {
     public enum FirstPlayableScreenMode
     {
-        Entry,
+        MainWaitingForBell,
+        CharacterArriving,
+        DocumentPresented,
         OpeningReview,
         Reviewing,
+        DecisionPaperClosed,
+        DecisionPaperOpen,
         DecisionDrawerOpening,
+        DecisionSubmitted,
+        CharacterExiting,
         DecisionReady,
         Result,
         Completed
@@ -55,7 +61,7 @@ namespace EpicProjectR.Presentation
             string entryTitle,
             string entryPrompt)
         {
-            Mode = FirstPlayableScreenMode.Entry;
+            Mode = FirstPlayableScreenMode.MainWaitingForBell;
             HeaderMeta = headerMeta ?? throw new ArgumentNullException(nameof(headerMeta));
             Docket = docket ?? throw new ArgumentNullException(nameof(docket));
             CaseSummary = caseSummary ?? throw new ArgumentNullException(nameof(caseSummary));
@@ -79,6 +85,7 @@ namespace EpicProjectR.Presentation
             string caseSummary,
             string reviewStatus,
             string premium,
+            string compensation,
             IEnumerable<string> dialogueLines,
             IEnumerable<DocumentRecord> documents,
             IEnumerable<FirstPlayableRuleRowState> rules)
@@ -89,6 +96,7 @@ namespace EpicProjectR.Presentation
             CaseSummary = caseSummary ?? throw new ArgumentNullException(nameof(caseSummary));
             ReviewStatus = reviewStatus ?? throw new ArgumentNullException(nameof(reviewStatus));
             Premium = premium ?? throw new ArgumentNullException(nameof(premium));
+            Compensation = compensation ?? throw new ArgumentNullException(nameof(compensation));
             DialogueLines = (dialogueLines ?? throw new ArgumentNullException(nameof(dialogueLines))).ToList().AsReadOnly();
             Documents = (documents ?? throw new ArgumentNullException(nameof(documents))).ToList().AsReadOnly();
             Rules = (rules ?? throw new ArgumentNullException(nameof(rules))).ToList().AsReadOnly();
@@ -100,6 +108,7 @@ namespace EpicProjectR.Presentation
         public string CaseSummary { get; }
         public string ReviewStatus { get; }
         public string Premium { get; }
+        public string Compensation { get; }
         public IReadOnlyList<string> DialogueLines { get; }
         public IReadOnlyList<DocumentRecord> Documents { get; }
         public IReadOnlyList<FirstPlayableRuleRowState> Rules { get; }

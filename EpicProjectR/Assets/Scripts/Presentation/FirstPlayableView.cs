@@ -23,7 +23,6 @@ namespace EpicProjectR.Presentation
         private Text hudLedgerText;
         private Text entryTitleText;
         private Text entryPromptText;
-        private Text dialogueText;
         private Text reviewStatusText;
         private Text premiumText;
         private Text resultText;
@@ -31,11 +30,13 @@ namespace EpicProjectR.Presentation
         private Text settlementText;
         private Text nextButtonText;
         private Text drawerApproveText;
+        private Text drawerCompensationText;
         private Text drawerPremiumText;
-        private Text drawerSummaryText;
         private Transform documentRoot;
         private Transform absoluteRulesRoot;
         private Transform considerationRulesRoot;
+        private GameObject absoluteRulesSection;
+        private GameObject considerationRulesSection;
         private RectTransform documentBoardRect;
         private RectTransform workbenchRect;
         private RectTransform shelfRect;
@@ -45,7 +46,7 @@ namespace EpicProjectR.Presentation
         private RectTransform decisionDrawerRect;
         private Button entryButton;
         private Button entryBellButton;
-        private Button documentBoardButton;
+        private Button reviewDocumentButton;
         private Button decisionBoxButton;
         private Button approveButton;
         private Button rejectButton;
@@ -56,13 +57,20 @@ namespace EpicProjectR.Presentation
         private GameObject decisionDrawer;
         private GameObject decisionRow;
         private GameObject nextRow;
+        private GameObject reviewDocumentObject;
+        private GameObject reviewBellObject;
         private Image contractorImage;
         private CanvasGroup contractorCanvasGroup;
         private Image entryContractorImage;
         private CanvasGroup entryContractorCanvasGroup;
+        private CanvasGroup entryBellCanvasGroup;
+        private CanvasGroup reviewBellCanvasGroup;
+        private ScrollRect dialogueScroll;
+        private Transform dialogueContentRoot;
         private IReadOnlyList<string> dialogueLines = Array.Empty<string>();
         private int dialogueIndex;
-        private bool resultAwaitingDocumentClick;
+        private int decisionDrawerTweenGeneration;
+        private string currentCompensationText = string.Empty;
 
         public FirstPlayableView(FirstPlayableUiTheme theme, FirstPlayableUiFactory factory)
         {
@@ -74,11 +82,12 @@ namespace EpicProjectR.Presentation
             }
         }
 
-        public event Action ReviewStarted;
+        public event Action BellRang;
+        public event Action PresentedDocumentClicked;
+        public event Action CharacterArrivalCompleted;
+        public event Action CharacterExitCompleted;
         public event Action DecisionDrawerRequested;
-        public event Action ReviewClosedRequested;
         public event Action<PlayerDecision, IReadOnlyList<RuleId>> DecisionSubmitted;
-        public event Action ResultAcknowledged;
 
         public void Build(Transform parent)
         {
@@ -101,9 +110,12 @@ namespace EpicProjectR.Presentation
             var background = factory.CreatePanel(canvasObject.transform, "Main Scene Background", theme.MainBackdrop, false, factory.Assets.MainBackgroundSprite);
             var backgroundImage = background.GetComponent<Image>();
             backgroundImage.preserveAspect = false;
+            if (backgroundImage.sprite != null)
+            {
+                backgroundImage.color = Color.white;
+            }
 
             factory.CreatePanel(background.transform, "Main Scene Dark Overlay", theme.MainOverlay, false);
-            BuildTopStrip(background.transform);
             entryRoot = CreateRoot(background.transform, "Entry Contract Root");
             reviewRoot = CreateRoot(background.transform, "Review Sequence Root");
             BuildEntry(entryRoot.transform);
@@ -112,6 +124,7 @@ namespace EpicProjectR.Presentation
             BuildShelfRules(reviewRoot.transform);
             BuildDecisionBox(reviewRoot.transform);
             BuildDecisionDrawer(reviewRoot.transform);
+            BuildTopStrip(background.transform);
             reviewRoot.SetActive(false);
             decisionDrawer.SetActive(false);
         }
@@ -126,13 +139,31 @@ namespace EpicProjectR.Presentation
             ClearReviewRoots();
             entryTitleText.text = state.EntryTitle;
             entryPromptText.text = state.EntryPrompt;
-            entryButton.interactable = true;
+            entryButton.interactable = false;
             entryBellButton.interactable = true;
-            resultAwaitingDocumentClick = false;
-            ResetEntryContractorPreview();
+            ResetEntryComposition(showCharacter: false, documentInteractable: false, bellInteractable: true);
             entryRoot.SetActive(true);
             reviewRoot.SetActive(false);
             decisionDrawer.SetActive(false);
+        }
+
+        public void PlayEntryCharacterArrival()
+        {
+            ResetEntryComposition(showCharacter: true, documentInteractable: false, bellInteractable: false);
+            tweenRunner.MoveTo(entryContractorRect, FirstPlayableMainSceneRectSpec.EntryContractorStartPosition, FirstPlayableMainSceneRectSpec.EntryContractorPosition, 0.46f);
+            tweenRunner.ScaleTo(entryContractorRect, new Vector3(0.42f, 0.42f, 1f), Vector3.one, 0.46f);
+            tweenRunner.FadeTo(entryContractorCanvasGroup, 0.12f, 1f, 0.46f);
+            tweenRunner.TintTo(entryContractorImage, new Color(0.44f, 0.40f, 0.35f, 1f), factory.Assets.MainContractorSprite != null ? Color.white : theme.Gold, 0.46f);
+            tweenRunner.InvokeAfter(0.48f, () => CharacterArrivalCompleted?.Invoke());
+        }
+
+        public void RenderDocumentPresented()
+        {
+            ClearReviewRoots();
+            entryRoot.SetActive(true);
+            reviewRoot.SetActive(false);
+            decisionDrawer.SetActive(false);
+            ResetEntryComposition(showCharacter: true, documentInteractable: true, bellInteractable: false);
         }
 
         public void RenderHud(FirstPlayableHudState state)
@@ -164,16 +195,19 @@ namespace EpicProjectR.Presentation
             decisionDrawer.SetActive(false);
             decisionBox.SetActive(true);
             decisionBoxButton.interactable = true;
-            resultAwaitingDocumentClick = false;
 
             reviewStatusText.text = state.ReviewStatus;
-            premiumText.text = state.Premium;
-            resultText.text = FirstPlayableKoreanText.ReviewWaitingAudit;
-            resultText.color = theme.Ink;
-            outcomeText.text = FirstPlayableKoreanText.ReviewWaitingOutcome;
-            outcomeText.color = theme.Ink;
-            settlementText.text = FirstPlayableKoreanText.ReviewWaitingSettlement;
-            settlementText.color = theme.MutedInk;
+            currentCompensationText = state.Compensation;
+            if (drawerCompensationText != null)
+            {
+                drawerCompensationText.text = currentCompensationText;
+            }
+
+            if (premiumText != null)
+            {
+                premiumText.text = FirstPlayableKoreanText.MainLoopPremium(0);
+            }
+
             SetDialogueLines(state.DialogueLines);
 
             for (var i = 0; i < state.Documents.Count; i++)
@@ -189,6 +223,8 @@ namespace EpicProjectR.Presentation
                 CreateRuleRow(parent, rule);
             }
 
+            absoluteRulesSection.SetActive(absoluteRulesRoot.childCount > 0);
+            considerationRulesSection.SetActive(considerationRulesRoot.childCount > 0);
             SetDecisionButtonsInteractable(true);
             nextRow.SetActive(false);
             RefreshDecisionDrawer();
@@ -197,6 +233,7 @@ namespace EpicProjectR.Presentation
 
         public void OpenDecisionDrawer()
         {
+            decisionDrawerTweenGeneration++;
             decisionDrawer.SetActive(true);
             RefreshDecisionDrawer();
             tweenRunner.MoveTo(decisionDrawerRect, FirstPlayableMainSceneRectSpec.DecisionDrawerClosedPosition, FirstPlayableMainSceneRectSpec.DecisionDrawerOpenPosition, 0.28f);
@@ -204,8 +241,17 @@ namespace EpicProjectR.Presentation
 
         public void CloseDecisionDrawer()
         {
+            decisionDrawerTweenGeneration++;
+            var closeGeneration = decisionDrawerTweenGeneration;
             RefreshDecisionDrawer();
             tweenRunner.MoveTo(decisionDrawerRect, FirstPlayableMainSceneRectSpec.DecisionDrawerOpenPosition, FirstPlayableMainSceneRectSpec.DecisionDrawerClosedPosition, 0.22f);
+            tweenRunner.InvokeAfter(0.24f, () =>
+            {
+                if (decisionDrawerTweenGeneration == closeGeneration)
+                {
+                    decisionDrawer.SetActive(false);
+                }
+            });
         }
 
         public void RenderResult(FirstPlayableResultScreenState state)
@@ -215,22 +261,13 @@ namespace EpicProjectR.Presentation
                 throw new ArgumentNullException(nameof(state));
             }
 
-            premiumText.text = state.Premium;
-            resultText.text = state.Result;
-            resultText.color = state.AuditCorrect ? theme.Correct : theme.Reject;
-            outcomeText.text = state.Outcome;
-            outcomeText.color = state.OutcomeWarning ? theme.Warning : theme.Ink;
-            settlementText.text = state.Settlement;
-            settlementText.color = theme.MutedInk;
-
+            AppendDialogueLine(state.AuditCorrect || !state.OutcomeWarning
+                ? FirstPlayableKoreanText.ContractorThanksLine
+                : FirstPlayableKoreanText.ContractorRejectLine);
             decisionBox.SetActive(false);
-            decisionDrawer.SetActive(true);
-            decisionDrawerRect.anchoredPosition = FirstPlayableMainSceneRectSpec.DecisionDrawerOpenPosition;
+            decisionDrawer.SetActive(false);
+            reviewDocumentObject.SetActive(false);
             SetDecisionButtonsInteractable(false);
-            nextRow.SetActive(true);
-            nextButton.interactable = true;
-            nextButtonText.text = state.NextButton;
-            resultAwaitingDocumentClick = true;
             PlayCharacterExit();
         }
 
@@ -250,6 +287,7 @@ namespace EpicProjectR.Presentation
             entryPromptText.text = state.Outcome + "\n" + state.Settlement;
             entryButton.interactable = false;
             entryBellButton.interactable = false;
+            ResetEntryComposition(showCharacter: false, documentInteractable: false, bellInteractable: false);
             entryRoot.SetActive(true);
             reviewRoot.SetActive(false);
             decisionDrawer.SetActive(false);
@@ -267,26 +305,36 @@ namespace EpicProjectR.Presentation
                 theme.TopStrip,
                 false,
                 factory.Assets.PanelSprite);
-            var layout = header.AddComponent<HorizontalLayoutGroup>();
-            layout.padding = new RectOffset(26, 26, 10, 10);
-            layout.spacing = 18;
-            layout.childForceExpandWidth = false;
-            layout.childAlignment = TextAnchor.MiddleLeft;
+            var letter = factory.CreateAnchoredPanel(
+                header.transform,
+                "Letter Prop Mark",
+                new Vector2(0f, 0.5f),
+                new Vector2(0f, 0.5f),
+                new Vector2(58f, 0f),
+                new Vector2(74f, 54f),
+                theme.Gold,
+                false,
+                factory.Assets.MainLetterSprite ?? factory.Assets.ShipSprite);
+            letter.GetComponent<Image>().preserveAspect = true;
 
-            var letter = factory.CreateSpriteImage(header.transform, "Letter Prop Mark", factory.Assets.MainLetterSprite ?? factory.Assets.ShipSprite, theme.Gold, true);
-            var letterElement = letter.GetComponent<LayoutElement>();
-            letterElement.preferredWidth = 74;
-            letterElement.preferredHeight = 54;
-
-            hudTitleText = factory.CreateText(header.transform, "Office Title", theme.TitleFont, 30, FontStyle.Bold, theme.LightText, TextAnchor.MiddleLeft);
+            hudTitleText = factory.CreateText(header.transform, "Office Title", theme.TitleFont, 28, FontStyle.Bold, theme.LightText, TextAnchor.MiddleLeft);
             hudTitleText.text = FirstPlayableKoreanText.OfficeTitle;
-            hudTitleText.GetComponent<LayoutElement>().preferredWidth = 620;
+            hudTitleText.resizeTextForBestFit = true;
+            hudTitleText.resizeTextMinSize = 20;
+            hudTitleText.resizeTextMaxSize = 28;
+            SetTextRect(hudTitleText, new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(104f, 0f), new Vector2(760f, 0f));
 
             hudDateText = factory.CreateText(header.transform, "Header Date", theme.TitleFont, 24, FontStyle.Bold, theme.LightText, TextAnchor.MiddleCenter);
-            hudDateText.GetComponent<LayoutElement>().flexibleWidth = 1;
+            hudDateText.resizeTextForBestFit = true;
+            hudDateText.resizeTextMinSize = 18;
+            hudDateText.resizeTextMaxSize = 24;
+            SetTextRect(hudDateText, new Vector2(0.5f, 0f), new Vector2(0.5f, 1f), Vector2.zero, new Vector2(420f, 0f));
 
             hudLedgerText = factory.CreateText(header.transform, "Header Ledger", theme.BodyFont, 18, FontStyle.Bold, theme.MutedText, TextAnchor.MiddleRight);
-            hudLedgerText.GetComponent<LayoutElement>().preferredWidth = 250;
+            hudLedgerText.resizeTextForBestFit = true;
+            hudLedgerText.resizeTextMinSize = 14;
+            hudLedgerText.resizeTextMaxSize = 18;
+            SetTextRect(hudLedgerText, new Vector2(1f, 0f), new Vector2(1f, 1f), new Vector2(-174f, 0f), new Vector2(320f, 0f));
         }
 
         private void BuildEntry(Transform parent)
@@ -298,27 +346,28 @@ namespace EpicProjectR.Presentation
             entryContractorImage.preserveAspect = true;
 
             var bell = factory.CreateAnchoredPanel(parent, "Entry Bell", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), FirstPlayableMainSceneRectSpec.EntryBellPosition, FirstPlayableMainSceneRectSpec.EntryBellSize, Color.white, true, factory.Assets.MainBellSprite ?? factory.Assets.MainSmallButtonSprite);
+            entryBellCanvasGroup = bell.AddComponent<CanvasGroup>();
             entryBellButton = bell.AddComponent<Button>();
             entryBellButton.targetGraphic = bell.GetComponent<Image>();
             theme.ApplyButton(entryBellButton, FirstPlayableButtonTone.Neutral);
-            entryBellButton.onClick.AddListener(() => ReviewStarted?.Invoke());
+            entryBellButton.onClick.AddListener(() => BellRang?.Invoke());
 
             var panel = factory.CreateAnchoredPanel(parent, "Clickable Entry Contract", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), FirstPlayableMainSceneRectSpec.EntryDocumentPosition, FirstPlayableMainSceneRectSpec.EntryDocumentSize, theme.Paper, true, factory.Assets.MainPaperSprite ?? factory.Assets.MainPaperTextureSprite ?? factory.Assets.DocumentPaperSprite);
             entryButton = panel.AddComponent<Button>();
             entryButton.targetGraphic = panel.GetComponent<Image>();
             theme.ApplyButton(entryButton, FirstPlayableButtonTone.Neutral);
-            entryButton.onClick.AddListener(() => ReviewStarted?.Invoke());
+            entryButton.onClick.AddListener(() => PresentedDocumentClicked?.Invoke());
 
             var layout = panel.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(34, 34, 34, 34);
-            layout.spacing = 14;
+            layout.padding = new RectOffset(16, 16, 16, 14);
+            layout.spacing = 6;
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = false;
 
-            entryTitleText = factory.CreateText(panel.transform, "Entry Title", theme.TitleFont, 24, FontStyle.Bold, theme.Ink, TextAnchor.MiddleCenter);
-            entryTitleText.GetComponent<LayoutElement>().preferredHeight = 96;
-            entryPromptText = factory.CreateText(panel.transform, "Entry Prompt", theme.BodyFont, 14, FontStyle.Bold, theme.MutedInk, TextAnchor.MiddleCenter);
-            entryPromptText.GetComponent<LayoutElement>().preferredHeight = 72;
+            entryTitleText = factory.CreateText(panel.transform, "Entry Title", theme.TitleFont, 15, FontStyle.Bold, theme.Ink, TextAnchor.MiddleCenter);
+            entryTitleText.GetComponent<LayoutElement>().preferredHeight = 42;
+            entryPromptText = factory.CreateText(panel.transform, "Entry Prompt", theme.BodyFont, 10, FontStyle.Bold, theme.MutedInk, TextAnchor.MiddleCenter);
+            entryPromptText.GetComponent<LayoutElement>().preferredHeight = 36;
         }
 
         private void BuildCharacterDialogue(Transform parent)
@@ -330,18 +379,31 @@ namespace EpicProjectR.Presentation
             contractorImage.preserveAspect = true;
             contractorImage.color = factory.Assets.MainContractorSprite != null ? Color.white : theme.Gold;
 
-            var dialogue = factory.CreateAnchoredPanel(parent, "Dialogue Panel", new Vector2(0f, 1f), new Vector2(0f, 1f), FirstPlayableMainSceneRectSpec.DialogueOpenPosition, FirstPlayableMainSceneRectSpec.DialogueSize, theme.Paper, true, factory.Assets.MainSpeechBubbleSprite ?? factory.Assets.MainPaperSprite);
+            reviewBellObject = factory.CreateAnchoredPanel(parent, "Review Inactive Bell", new Vector2(0f, 0f), new Vector2(0f, 0f), FirstPlayableMainSceneRectSpec.ReviewBellPosition, FirstPlayableMainSceneRectSpec.ReviewBellSize, Color.white, false, factory.Assets.MainBellSprite ?? factory.Assets.MainSmallButtonSprite);
+            reviewBellCanvasGroup = reviewBellObject.AddComponent<CanvasGroup>();
+            reviewBellCanvasGroup.alpha = 0.42f;
+
+            reviewDocumentObject = factory.CreateAnchoredPanel(parent, "Presented Review Document", new Vector2(0f, 0f), new Vector2(0f, 0f), FirstPlayableMainSceneRectSpec.ReviewDocumentPosition, FirstPlayableMainSceneRectSpec.ReviewDocumentSize, theme.Paper, true, factory.Assets.MainPaperSprite ?? factory.Assets.MainPaperTextureSprite ?? factory.Assets.DocumentPaperSprite);
+            reviewDocumentButton = reviewDocumentObject.AddComponent<Button>();
+            reviewDocumentButton.targetGraphic = reviewDocumentObject.GetComponent<Image>();
+            theme.ApplyButton(reviewDocumentButton, FirstPlayableButtonTone.Neutral);
+            reviewDocumentButton.onClick.AddListener(() => PresentedDocumentClicked?.Invoke());
+
+            var dialogue = factory.CreateAnchoredPanel(parent, "Dialogue Log Panel", new Vector2(0f, 1f), new Vector2(0f, 1f), FirstPlayableMainSceneRectSpec.DialogueOpenPosition, FirstPlayableMainSceneRectSpec.DialogueSize, theme.Paper, true, factory.Assets.MainPaperSprite ?? factory.Assets.MainSpeechBubbleSprite);
             dialogueRect = dialogue.GetComponent<RectTransform>();
             var button = dialogue.AddComponent<Button>();
             button.targetGraphic = dialogue.GetComponent<Image>();
             theme.ApplyButton(button, FirstPlayableButtonTone.Neutral);
             button.onClick.AddListener(AdvanceDialogue);
             var layout = dialogue.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(34, 34, 28, 24);
+            layout.padding = new RectOffset(16, 16, 14, 14);
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = true;
-            dialogueText = factory.CreateText(dialogue.transform, "Dialogue Text", theme.BodyFont, 24, FontStyle.Bold, theme.Ink, TextAnchor.MiddleLeft);
-            dialogueText.text = FirstPlayableKoreanText.DialogueReviewIntro;
+            dialogueScroll = factory.CreateScroll(dialogue.transform, "Dialogue Scroll", new Color(1f, 1f, 1f, 0.02f), out dialogueContentRoot);
+            var scrollElement = dialogueScroll.gameObject.AddComponent<LayoutElement>();
+            scrollElement.flexibleHeight = 1;
+            dialogueScroll.movementType = ScrollRect.MovementType.Clamped;
+            dialogueScroll.scrollSensitivity = 28f;
         }
 
         private void BuildWorkbench(Transform parent)
@@ -381,10 +443,6 @@ namespace EpicProjectR.Presentation
             boardElement.preferredHeight = FirstPlayableMainSceneRectSpec.DocumentBoardSize.y;
             boardElement.flexibleHeight = 1;
             documentBoardRect = documentBoard.GetComponent<RectTransform>();
-            documentBoardButton = documentBoard.AddComponent<Button>();
-            documentBoardButton.targetGraphic = documentBoard.GetComponent<Image>();
-            theme.ApplyButton(documentBoardButton, FirstPlayableButtonTone.Neutral);
-            documentBoardButton.onClick.AddListener(OnDocumentBoardClicked);
             documentRoot = documentBoard.transform;
         }
 
@@ -393,29 +451,39 @@ namespace EpicProjectR.Presentation
             var panel = factory.CreateAnchoredPanel(parent, "Right Shelf Checklist", new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), FirstPlayableMainSceneRectSpec.ShelfOpenPosition, FirstPlayableMainSceneRectSpec.ShelfSize, theme.WorkPanelAlt, true, factory.Assets.PanelSprite);
             shelfRect = panel.GetComponent<RectTransform>();
             var layout = panel.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(16, 16, 18, 16);
+            layout.padding = new RectOffset(12, 12, 16, 14);
             layout.spacing = 8;
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = false;
 
             reviewStatusText = factory.CreateText(panel.transform, "Review Status", theme.BodyFont, 14, FontStyle.Bold, theme.LightText, TextAnchor.UpperLeft);
-            reviewStatusText.GetComponent<LayoutElement>().preferredHeight = 38;
-            BuildRuleSection(panel.transform, FirstPlayableKoreanText.AbsoluteRuleSectionTitle, out absoluteRulesRoot);
-            BuildRuleSection(panel.transform, FirstPlayableKoreanText.ConsiderationRuleSectionTitle, out considerationRulesRoot);
+            reviewStatusText.gameObject.SetActive(false);
+            BuildRuleSection(panel.transform, FirstPlayableKoreanText.AbsoluteRuleSectionTitle, out absoluteRulesSection, out absoluteRulesRoot);
+            BuildRuleSection(panel.transform, FirstPlayableKoreanText.ConsiderationRuleSectionTitle, out considerationRulesSection, out considerationRulesRoot);
         }
 
-        private void BuildRuleSection(Transform parent, string title, out Transform root)
+        private void BuildRuleSection(Transform parent, string title, out GameObject section, out Transform root)
         {
-            factory.CreateSectionTitle(parent, title);
-            var scroll = factory.CreateScroll(parent, title + " Scroll", theme.PaperInset, out root);
+            section = new GameObject(title + " Section", typeof(RectTransform));
+            section.transform.SetParent(parent, false);
+            var sectionLayout = section.AddComponent<VerticalLayoutGroup>();
+            sectionLayout.spacing = 6;
+            sectionLayout.childForceExpandWidth = true;
+            sectionLayout.childForceExpandHeight = false;
+            var sectionElement = section.AddComponent<LayoutElement>();
+            sectionElement.preferredHeight = title == FirstPlayableKoreanText.AbsoluteRuleSectionTitle ? 284f : 372f;
+            sectionElement.flexibleHeight = 1;
+
+            factory.CreateSectionTitle(section.transform, title);
+            var scroll = factory.CreateScroll(section.transform, title + " Scroll", new Color(1f, 1f, 1f, 0.04f), out root);
             var element = scroll.gameObject.AddComponent<LayoutElement>();
-            element.preferredHeight = title == FirstPlayableKoreanText.AbsoluteRuleSectionTitle ? 280f : 360f;
+            element.preferredHeight = title == FirstPlayableKoreanText.AbsoluteRuleSectionTitle ? 226f : 314f;
             element.flexibleHeight = 1;
         }
 
         private void BuildDecisionBox(Transform parent)
         {
-            decisionBox = factory.CreateAnchoredPanel(parent, "Final Decision Box", new Vector2(1f, 0f), new Vector2(1f, 0f), FirstPlayableMainSceneRectSpec.FinalDecisionBoxPosition, FirstPlayableMainSceneRectSpec.FinalDecisionBoxSize, Color.white, true, factory.Assets.MainBellSprite ?? factory.Assets.MainSmallButtonSprite);
+            decisionBox = factory.CreateAnchoredPanel(parent, "Final Decision Paper Button", new Vector2(1f, 0f), new Vector2(1f, 0f), FirstPlayableMainSceneRectSpec.FinalDecisionBoxPosition, FirstPlayableMainSceneRectSpec.FinalDecisionBoxSize, theme.Paper, true, factory.Assets.MainPaperSprite ?? factory.Assets.MainPaperTextureSprite ?? factory.Assets.DocumentPaperSprite);
             decisionBoxButton = decisionBox.AddComponent<Button>();
             decisionBoxButton.targetGraphic = decisionBox.GetComponent<Image>();
             theme.ApplyButton(decisionBoxButton, FirstPlayableButtonTone.Neutral);
@@ -427,70 +495,42 @@ namespace EpicProjectR.Presentation
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = false;
 
-            var title = factory.CreateText(decisionBox.transform, "Decision Box Title", theme.TitleFont, 14, FontStyle.Bold, theme.LightText, TextAnchor.MiddleCenter);
+            var title = factory.CreateText(decisionBox.transform, "Decision Box Title", theme.TitleFont, 17, FontStyle.Bold, theme.Ink, TextAnchor.MiddleCenter);
             title.text = FirstPlayableKoreanText.DecisionBoxTitle;
-            title.GetComponent<LayoutElement>().preferredHeight = 28;
-            var prompt = factory.CreateText(decisionBox.transform, "Decision Box Prompt", theme.BodyFont, 10, FontStyle.Bold, theme.MutedText, TextAnchor.MiddleCenter);
-            prompt.text = FirstPlayableKoreanText.DecisionBoxPrompt;
-            prompt.GetComponent<LayoutElement>().preferredHeight = 32;
+            title.GetComponent<LayoutElement>().preferredHeight = 46;
         }
 
         private void BuildDecisionDrawer(Transform parent)
         {
             decisionDrawer = factory.CreateAnchoredPanel(parent, "Bottom Right Decision Paper", new Vector2(1f, 0f), new Vector2(1f, 0f), FirstPlayableMainSceneRectSpec.DecisionDrawerClosedPosition, FirstPlayableMainSceneRectSpec.DecisionDrawerSize, theme.Paper, true, factory.Assets.MainPaperTextureSprite ?? factory.Assets.MainPaperSprite ?? factory.Assets.DocumentPaperSprite);
             decisionDrawerRect = decisionDrawer.GetComponent<RectTransform>();
-            var layout = decisionDrawer.AddComponent<HorizontalLayoutGroup>();
-            layout.padding = new RectOffset(18, 18, 16, 16);
-            layout.spacing = 14;
+            var layout = decisionDrawer.AddComponent<VerticalLayoutGroup>();
+            layout.padding = new RectOffset(18, 18, 18, 18);
+            layout.spacing = 12;
             layout.childForceExpandWidth = true;
-            layout.childForceExpandHeight = true;
+            layout.childForceExpandHeight = false;
 
-            var resultColumn = new GameObject("Result Column");
-            resultColumn.transform.SetParent(decisionDrawer.transform, false);
-            resultColumn.AddComponent<LayoutElement>().flexibleWidth = 2;
-            var resultLayout = resultColumn.AddComponent<VerticalLayoutGroup>();
-            resultLayout.spacing = 7;
-            resultLayout.childForceExpandWidth = true;
-            resultLayout.childForceExpandHeight = false;
-
-            var drawerTitle = factory.CreateText(resultColumn.transform, "Decision Drawer Title", theme.TitleFont, 20, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
+            var drawerTitle = factory.CreateText(decisionDrawer.transform, "Decision Drawer Title", theme.TitleFont, 22, FontStyle.Bold, theme.Ink, TextAnchor.MiddleCenter);
             drawerTitle.text = FirstPlayableKoreanText.DecisionDrawerTitle;
-            drawerTitle.GetComponent<LayoutElement>().preferredHeight = 30;
+            drawerTitle.GetComponent<LayoutElement>().preferredHeight = 58;
 
-            var summaryPaper = factory.CreatePanel(resultColumn.transform, "Selected Reason Paper", Color.white, true, factory.Assets.MainPaperSprite ?? factory.Assets.DocumentPaperSprite);
-            summaryPaper.AddComponent<LayoutElement>().preferredHeight = 92;
-            var summaryLayout = summaryPaper.AddComponent<VerticalLayoutGroup>();
-            summaryLayout.padding = new RectOffset(12, 12, 10, 14);
-            summaryLayout.spacing = 5;
-            summaryLayout.childForceExpandWidth = true;
-            summaryLayout.childForceExpandHeight = false;
-            drawerPremiumText = factory.CreateText(summaryPaper.transform, "Drawer Premium", theme.TitleFont, 17, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
-            drawerSummaryText = factory.CreateText(summaryPaper.transform, "Drawer Summary", theme.BodyFont, 14, FontStyle.Bold, theme.MutedInk, TextAnchor.UpperLeft);
-            premiumText = factory.CreateText(resultColumn.transform, "Premium Quote", theme.TitleFont, 17, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
-            resultText = factory.CreateText(resultColumn.transform, "Audit Result", theme.BodyFont, 14, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
-            outcomeText = factory.CreateText(resultColumn.transform, "Outcome Result", theme.BodyFont, 14, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
-            settlementText = factory.CreateText(resultColumn.transform, "Settlement Result", theme.BodyFont, 13, FontStyle.Bold, theme.MutedInk, TextAnchor.UpperLeft);
-            drawerPremiumText.GetComponent<LayoutElement>().preferredHeight = 26;
-            drawerSummaryText.GetComponent<LayoutElement>().preferredHeight = 24;
-            premiumText.GetComponent<LayoutElement>().preferredHeight = 26;
-            resultText.GetComponent<LayoutElement>().preferredHeight = 70;
-            outcomeText.GetComponent<LayoutElement>().preferredHeight = 42;
-            settlementText.GetComponent<LayoutElement>().preferredHeight = 52;
+            var middlePaper = factory.CreatePanel(decisionDrawer.transform, "Decision Amounts", Color.white, true, factory.Assets.MainPaperSprite ?? factory.Assets.DocumentPaperSprite);
+            middlePaper.AddComponent<LayoutElement>().preferredHeight = 150;
+            var middleLayout = middlePaper.AddComponent<VerticalLayoutGroup>();
+            middleLayout.padding = new RectOffset(16, 16, 18, 18);
+            middleLayout.spacing = 18;
+            middleLayout.childForceExpandWidth = true;
+            middleLayout.childForceExpandHeight = false;
 
-            var actionColumn = new GameObject("Action Column");
-            actionColumn.transform.SetParent(decisionDrawer.transform, false);
-            actionColumn.AddComponent<LayoutElement>().preferredWidth = 245;
-            var actionLayout = actionColumn.AddComponent<VerticalLayoutGroup>();
-            actionLayout.spacing = 10;
-            actionLayout.childForceExpandWidth = true;
-            actionLayout.childForceExpandHeight = false;
+            drawerCompensationText = factory.CreateText(middlePaper.transform, "Compensation Amount", theme.TitleFont, 18, FontStyle.Bold, theme.Ink, TextAnchor.MiddleLeft);
+            drawerCompensationText.GetComponent<LayoutElement>().preferredHeight = 42;
+            premiumText = factory.CreateText(middlePaper.transform, "Premium Percent", theme.TitleFont, 18, FontStyle.Bold, theme.Ink, TextAnchor.MiddleLeft);
+            premiumText.GetComponent<LayoutElement>().preferredHeight = 42;
+            drawerPremiumText = premiumText;
 
-            var prompt = factory.CreateText(actionColumn.transform, "Decision Drawer Prompt", theme.BodyFont, 14, FontStyle.Bold, theme.MutedInk, TextAnchor.MiddleCenter);
-            prompt.text = FirstPlayableKoreanText.DecisionDrawerPrompt;
-            prompt.GetComponent<LayoutElement>().preferredHeight = 42;
-
-            decisionRow = new GameObject("Decision Buttons");
-            decisionRow.transform.SetParent(actionColumn.transform, false);
+            decisionRow = new GameObject("Decision Buttons", typeof(RectTransform));
+            decisionRow.transform.SetParent(decisionDrawer.transform, false);
+            decisionRow.AddComponent<LayoutElement>().preferredHeight = 72;
             var decisionLayout = decisionRow.AddComponent<HorizontalLayoutGroup>();
             decisionLayout.spacing = 10;
             decisionLayout.childForceExpandWidth = false;
@@ -501,10 +541,11 @@ namespace EpicProjectR.Presentation
             ApplyDecisionButtonSize(approveButton);
             drawerApproveText = approveButton.GetComponentInChildren<Text>();
 
-            nextRow = new GameObject("Continue Row");
-            nextRow.transform.SetParent(actionColumn.transform, false);
-            nextButton = factory.CreateButton(nextRow.transform, FirstPlayableKoreanText.NextContractButton, FirstPlayableButtonTone.Neutral, () => ResultAcknowledged?.Invoke());
+            nextRow = new GameObject("Continue Row", typeof(RectTransform));
+            nextRow.transform.SetParent(decisionDrawer.transform, false);
+            nextButton = factory.CreateButton(nextRow.transform, FirstPlayableKoreanText.NextContractButton, FirstPlayableButtonTone.Neutral, () => { });
             nextButtonText = nextButton.GetComponentInChildren<Text>();
+            nextRow.SetActive(false);
         }
 
         private void CreateDocumentCard(Transform parent, DocumentRecord document, int index)
@@ -543,8 +584,11 @@ namespace EpicProjectR.Presentation
         private void CreateRuleRow(Transform parent, FirstPlayableRuleRowState rowState)
         {
             var rule = rowState.Rule;
-            var row = factory.CreatePanel(parent, rule.Id.ToString(), theme.DisabledRow, true, factory.Assets.MainPaperSprite);
-            row.AddComponent<LayoutElement>().minHeight = FirstPlayableMainSceneRectSpec.RuleRowHeight;
+            var row = factory.CreatePanel(parent, "Applicable Reason", theme.Paper, true, factory.Assets.MainPaperSprite ?? factory.Assets.DocumentPaperSprite);
+            var rowElement = row.AddComponent<LayoutElement>();
+            rowElement.minHeight = FirstPlayableMainSceneRectSpec.RuleRowHeight;
+            rowElement.preferredHeight = FirstPlayableMainSceneRectSpec.RuleRowHeight;
+            rowElement.flexibleWidth = 1;
             var image = row.GetComponent<Image>();
             ruleRows[rule.Id] = image;
             ruleSeverities[rule.Id] = rule.Severity;
@@ -555,15 +599,10 @@ namespace EpicProjectR.Presentation
             ruleToggles[rule.Id] = toggle;
 
             var layout = row.AddComponent<HorizontalLayoutGroup>();
-            layout.padding = new RectOffset(10, 10, 8, 8);
+            layout.padding = new RectOffset(12, 12, 8, 8);
             layout.spacing = 10;
             layout.childForceExpandWidth = false;
             layout.childAlignment = TextAnchor.MiddleLeft;
-
-            var marker = factory.CreatePanel(row.transform, "Severity Marker", RuleColor(rule), false);
-            marker.AddComponent<LayoutElement>().preferredWidth = 46;
-            var markerText = factory.CreateText(marker.transform, "Severity", theme.TitleFont, 15, FontStyle.Bold, theme.LightText, TextAnchor.MiddleCenter);
-            markerText.text = FirstPlayableKoreanText.RuleSeverityMarker(rule.Severity);
 
             var check = factory.CreatePanel(row.transform, "Check", theme.Paper, true);
             var checkElement = check.AddComponent<LayoutElement>();
@@ -587,8 +626,10 @@ namespace EpicProjectR.Presentation
 
             var title = factory.CreateText(labelColumn.transform, "Title", theme.TitleFont, 14, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
             title.text = FirstPlayableKoreanText.RuleTitle(rule);
-            var detail = factory.CreateText(labelColumn.transform, "Detail", theme.BodyFont, 12, FontStyle.Bold, theme.MutedInk, TextAnchor.UpperLeft);
-            detail.text = FirstPlayableKoreanText.RuleFindingText(rowState.IsTriggered);
+            title.resizeTextForBestFit = true;
+            title.resizeTextMinSize = 11;
+            title.resizeTextMaxSize = 14;
+            title.GetComponent<LayoutElement>().preferredHeight = 38;
 
             toggle.onValueChanged.AddListener(_ =>
             {
@@ -606,25 +647,14 @@ namespace EpicProjectR.Presentation
             DecisionSubmitted?.Invoke(submittedDecision, ruleToggles.Where(pair => pair.Value.isOn).Select(pair => pair.Key).ToList());
         }
 
-        private void OnDocumentBoardClicked()
-        {
-            if (resultAwaitingDocumentClick)
-            {
-                resultAwaitingDocumentClick = false;
-                ResultAcknowledged?.Invoke();
-                return;
-            }
-
-            ReviewClosedRequested?.Invoke();
-        }
-
         private void SetDialogueLines(IReadOnlyList<string> lines)
         {
             dialogueLines = lines != null && lines.Count > 0
                 ? lines
                 : new[] { FirstPlayableKoreanText.DialogueReviewIntro };
             dialogueIndex = 0;
-            dialogueText.text = dialogueLines[dialogueIndex];
+            ClearDialogueRows();
+            AppendDialogueLine(dialogueLines[dialogueIndex]);
         }
 
         private void AdvanceDialogue()
@@ -635,26 +665,94 @@ namespace EpicProjectR.Presentation
             }
 
             dialogueIndex = Mathf.Min(dialogueIndex + 1, dialogueLines.Count - 1);
-            dialogueText.text = dialogueLines[dialogueIndex];
+            if (dialogueContentRoot.childCount < dialogueIndex + 1)
+            {
+                AppendDialogueLine(dialogueLines[dialogueIndex]);
+            }
         }
 
-        private void ResetEntryContractorPreview()
+        private void AppendDialogueLine(string line)
+        {
+            if (dialogueContentRoot == null || string.IsNullOrWhiteSpace(line))
+            {
+                return;
+            }
+
+            var row = new GameObject("Dialogue Message Row", typeof(RectTransform));
+            row.transform.SetParent(dialogueContentRoot, false);
+            var rowLayout = row.AddComponent<HorizontalLayoutGroup>();
+            rowLayout.childAlignment = TextAnchor.MiddleLeft;
+            rowLayout.childForceExpandWidth = false;
+            rowLayout.childForceExpandHeight = false;
+            var rowElement = row.AddComponent<LayoutElement>();
+            rowElement.minHeight = 54f;
+
+            var bubble = factory.CreatePanel(row.transform, "Dialogue Bubble", Color.white, true, factory.Assets.MainSpeechBubbleSprite ?? factory.Assets.MainPaperSprite);
+            var bubbleElement = bubble.AddComponent<LayoutElement>();
+            bubbleElement.minWidth = 180f;
+            bubbleElement.preferredWidth = 500f;
+            bubbleElement.minHeight = 54f;
+            var bubbleLayout = bubble.AddComponent<VerticalLayoutGroup>();
+            bubbleLayout.padding = new RectOffset(16, 16, 10, 10);
+            bubbleLayout.childForceExpandWidth = true;
+            bubbleLayout.childForceExpandHeight = false;
+
+            var text = factory.CreateText(bubble.transform, "Message", theme.BodyFont, 17, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
+            text.text = line;
+            text.GetComponent<LayoutElement>().preferredHeight = 46f;
+
+            Canvas.ForceUpdateCanvases();
+            if (dialogueScroll != null)
+            {
+                dialogueScroll.verticalNormalizedPosition = 0f;
+            }
+        }
+
+        private void ClearDialogueRows()
+        {
+            if (dialogueContentRoot == null)
+            {
+                return;
+            }
+
+            ClearRoot(dialogueContentRoot);
+        }
+
+        private void ResetEntryComposition(bool showCharacter, bool documentInteractable, bool bellInteractable)
         {
             if (entryContractorRect != null)
             {
-                entryContractorRect.localScale = new Vector3(0.82f, 0.82f, 1f);
+                entryContractorRect.anchoredPosition = showCharacter
+                    ? FirstPlayableMainSceneRectSpec.EntryContractorPosition
+                    : FirstPlayableMainSceneRectSpec.EntryContractorStartPosition;
+                entryContractorRect.localScale = showCharacter ? Vector3.one : new Vector3(0.42f, 0.42f, 1f);
             }
 
             if (entryContractorCanvasGroup != null)
             {
-                entryContractorCanvasGroup.alpha = 0.62f;
+                entryContractorCanvasGroup.alpha = showCharacter ? 1f : 0f;
             }
 
             if (entryContractorImage != null)
             {
                 entryContractorImage.color = factory.Assets.MainContractorSprite != null
-                    ? new Color(0.72f, 0.68f, 0.62f, 1f)
+                    ? (showCharacter ? Color.white : new Color(0.44f, 0.40f, 0.35f, 1f))
                     : theme.Gold;
+            }
+
+            if (entryButton != null)
+            {
+                entryButton.interactable = documentInteractable;
+            }
+
+            if (entryBellButton != null)
+            {
+                entryBellButton.interactable = bellInteractable;
+            }
+
+            if (entryBellCanvasGroup != null)
+            {
+                entryBellCanvasGroup.alpha = bellInteractable ? 1f : 0.42f;
             }
         }
 
@@ -664,10 +762,18 @@ namespace EpicProjectR.Presentation
             tweenRunner.ScaleTo(contractorRect, Vector3.one, new Vector3(0.58f, 0.58f, 1f), 0.32f);
             tweenRunner.FadeTo(contractorCanvasGroup, 1f, 0.25f, 0.32f);
             tweenRunner.TintTo(contractorImage, contractorImage != null ? contractorImage.color : Color.white, new Color(0.34f, 0.3f, 0.28f, 0.9f), 0.32f);
+            tweenRunner.InvokeAfter(0.36f, () => CharacterExitCompleted?.Invoke());
         }
 
         private void PlayReviewOpening()
         {
+            reviewDocumentObject.SetActive(true);
+            reviewBellObject.SetActive(true);
+            if (reviewBellCanvasGroup != null)
+            {
+                reviewBellCanvasGroup.alpha = 0.42f;
+            }
+
             tweenRunner.MoveTo(contractorRect, FirstPlayableMainSceneRectSpec.ContractorClosedPosition, FirstPlayableMainSceneRectSpec.ContractorOpenPosition, 0.32f);
             tweenRunner.MoveTo(dialogueRect, FirstPlayableMainSceneRectSpec.DialogueClosedPosition, FirstPlayableMainSceneRectSpec.DialogueOpenPosition, 0.36f);
             tweenRunner.MoveTo(workbenchRect, FirstPlayableMainSceneRectSpec.WorkbenchClosedPosition, FirstPlayableMainSceneRectSpec.WorkbenchOpenPosition, 0.4f);
@@ -693,6 +799,29 @@ namespace EpicProjectR.Presentation
 
             layoutElement.preferredWidth = FirstPlayableMainSceneRectSpec.DecisionButtonSize.x;
             layoutElement.preferredHeight = FirstPlayableMainSceneRectSpec.DecisionButtonSize.y;
+            var label = button.GetComponentInChildren<Text>();
+            if (label != null)
+            {
+                label.resizeTextForBestFit = true;
+                label.resizeTextMinSize = 11;
+                label.resizeTextMaxSize = 17;
+            }
+        }
+
+        private static void SetTextRect(Text text, Vector2 anchorMin, Vector2 anchorMax, Vector2 anchoredPosition, Vector2 sizeDelta)
+        {
+            if (text == null)
+            {
+                return;
+            }
+
+            var rect = text.GetComponent<RectTransform>();
+            rect.anchorMin = anchorMin;
+            rect.anchorMax = anchorMax;
+            rect.anchoredPosition = anchoredPosition;
+            rect.sizeDelta = sizeDelta;
+            rect.offsetMin = new Vector2(rect.offsetMin.x, 0f);
+            rect.offsetMax = new Vector2(rect.offsetMax.x, 0f);
         }
 
         private void SetDecisionButtonsInteractable(bool interactable)
@@ -719,16 +848,10 @@ namespace EpicProjectR.Presentation
 
         private void RefreshDecisionDrawer()
         {
-            var selectedAbsolute = CountSelectedAbsoluteRejections();
             var selectedConsiderations = CountSelectedConsiderations();
             if (drawerPremiumText != null)
             {
                 drawerPremiumText.text = FirstPlayableKoreanText.MainLoopPremium(selectedConsiderations);
-            }
-
-            if (drawerSummaryText != null)
-            {
-                drawerSummaryText.text = FirstPlayableKoreanText.SelectedReasonSummary(selectedAbsolute, selectedConsiderations);
             }
 
             if (drawerApproveText != null)

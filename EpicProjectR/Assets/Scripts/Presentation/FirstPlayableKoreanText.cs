@@ -27,6 +27,10 @@ namespace EpicProjectR.Presentation
         public const string DecisionDrawerTitle = "인수 결정서";
         public const string DecisionDrawerPrompt = "왼쪽은 거절, 오른쪽은 승인입니다.";
         public const string NoSelectedReasons = "선택된 사유 없음";
+        public const string DecisionCompensationLabel = "손해보상금";
+        public const string DecisionPremiumLabel = "보험료";
+        public const string ContractorThanksLine = "감사합니다.";
+        public const string ContractorRejectLine = "다음 기회를 기다리겠습니다.";
         public const string ReviewWaitingAudit = "판단 평가: 결정을 기다리는 중입니다.";
         public const string ReviewWaitingOutcome = "계약 결과: 아직 제출된 결정이 없습니다.";
         public const string ReviewWaitingSettlement = "정산: 아직 정산 항목이 없습니다.";
@@ -106,18 +110,18 @@ namespace EpicProjectR.Presentation
 
         public static string ActiveRuleStatus(int activeRuleCount)
         {
-            return $"서류에서 확인되는 심사 사유 {activeRuleCount}개";
+            return string.Empty;
         }
 
         public static string MainLoopPremium(int selectedConsiderationCount)
         {
             var percent = FirstPlayableMainLoopState.PremiumPercentForSelectedConsiderations(selectedConsiderationCount);
-            if (selectedConsiderationCount == 0)
-            {
-                return $"적용 보험료: {percent}%";
-            }
+            return $"{DecisionPremiumLabel}: {percent}%";
+        }
 
-            return $"적용 보험료: {percent}%  |  고려 사유 {selectedConsiderationCount}개";
+        public static string DecisionCompensation(MoneyAmount coverage)
+        {
+            return $"{DecisionCompensationLabel}: {coverage.Ducats} 두카트";
         }
 
         public static string SelectedReasonSummary(int selectedAbsoluteCount, int selectedConsiderationCount)
