@@ -10,10 +10,10 @@ namespace EpicProjectR.Presentation
         public static readonly Vector2 HeaderPosition = new Vector2(0f, -40f);
         public static readonly Vector2 HeaderSize = new Vector2(0f, 80f);
 
-        public static readonly Vector2 EntryDocumentPosition = new Vector2(76f, -370f);
-        public static readonly Vector2 EntryDocumentSize = new Vector2(168f, 122f);
-        public static readonly Vector2 EntryBellPosition = new Vector2(-92f, -372f);
-        public static readonly Vector2 EntryBellSize = new Vector2(86f, 68f);
+        public static readonly Vector2 EntryDocumentPosition = new Vector2(0f, -331f);
+        public static readonly Vector2 EntryDocumentSize = new Vector2(102f, 75f);
+        public static readonly Vector2 EntryBellPosition = new Vector2(-197f, -305f);
+        public static readonly Vector2 EntryBellSize = new Vector2(120f, 120f);
         public static readonly Vector2 EntryContractorStartPosition = new Vector2(0f, -318f);
         public static readonly Vector2 EntryContractorPosition = new Vector2(-340f, -258f);
         public static readonly Vector2 EntryContractorSize = new Vector2(286f, 360f);
@@ -31,9 +31,9 @@ namespace EpicProjectR.Presentation
         public static readonly Vector2 DialogueSize = new Vector2(522f, 350f);
 
         public static readonly Vector2 ReviewDocumentPosition = new Vector2(430f, 96f);
-        public static readonly Vector2 ReviewDocumentSize = new Vector2(154f, 110f);
+        public static readonly Vector2 ReviewDocumentSize = new Vector2(126f, 92f);
         public static readonly Vector2 ReviewBellPosition = new Vector2(176f, 94f);
-        public static readonly Vector2 ReviewBellSize = new Vector2(70f, 56f);
+        public static readonly Vector2 ReviewBellSize = new Vector2(72f, 72f);
 
         public static readonly Vector2 WorkbenchOpenPosition = new Vector2(92f, -42f);
         public static readonly Vector2 WorkbenchClosedPosition = new Vector2(1320f, -42f);

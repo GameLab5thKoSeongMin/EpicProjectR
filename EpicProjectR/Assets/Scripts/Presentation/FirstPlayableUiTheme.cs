@@ -41,8 +41,8 @@ namespace EpicProjectR.Presentation
         public Color Approve => new Color(0.25f, 0.42f, 0.28f, 1f);
         public Color Reject => new Color(0.58f, 0.19f, 0.12f, 1f);
         public Color Consideration => new Color(0.18f, 0.34f, 0.52f, 1f);
-        public Color DisabledRow => new Color(0.56f, 0.43f, 0.28f, 0.95f);
-        public Color SelectedRow => new Color(0.82f, 0.56f, 0.23f, 0.98f);
+        public Color DisabledRow => new Color(0.83f, 0.72f, 0.52f, 0.98f);
+        public Color SelectedRow => new Color(0.93f, 0.68f, 0.3f, 1f);
         public Color Correct => new Color(0.22f, 0.47f, 0.31f, 1f);
         public Color Warning => new Color(0.67f, 0.39f, 0.17f, 1f);
 

@@ -160,6 +160,7 @@ namespace EpicProjectR.Presentation
         public void RenderDocumentPresented()
         {
             ClearReviewRoots();
+            entryPromptText.text = FirstPlayableKoreanText.DocumentPresentedPrompt;
             entryRoot.SetActive(true);
             reviewRoot.SetActive(false);
             decisionDrawer.SetActive(false);
@@ -322,7 +323,7 @@ namespace EpicProjectR.Presentation
             hudTitleText.resizeTextForBestFit = true;
             hudTitleText.resizeTextMinSize = 20;
             hudTitleText.resizeTextMaxSize = 28;
-            SetTextRect(hudTitleText, new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(104f, 0f), new Vector2(760f, 0f));
+            SetTextRect(hudTitleText, new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(430f, 0f), new Vector2(650f, 0f));
 
             hudDateText = factory.CreateText(header.transform, "Header Date", theme.TitleFont, 24, FontStyle.Bold, theme.LightText, TextAnchor.MiddleCenter);
             hudDateText.resizeTextForBestFit = true;
@@ -346,6 +347,7 @@ namespace EpicProjectR.Presentation
             entryContractorImage.preserveAspect = true;
 
             var bell = factory.CreateAnchoredPanel(parent, "Entry Bell", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), FirstPlayableMainSceneRectSpec.EntryBellPosition, FirstPlayableMainSceneRectSpec.EntryBellSize, Color.white, true, factory.Assets.MainBellSprite ?? factory.Assets.MainSmallButtonSprite);
+            bell.GetComponent<Image>().preserveAspect = true;
             entryBellCanvasGroup = bell.AddComponent<CanvasGroup>();
             entryBellButton = bell.AddComponent<Button>();
             entryBellButton.targetGraphic = bell.GetComponent<Image>();
@@ -353,6 +355,7 @@ namespace EpicProjectR.Presentation
             entryBellButton.onClick.AddListener(() => BellRang?.Invoke());
 
             var panel = factory.CreateAnchoredPanel(parent, "Clickable Entry Contract", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), FirstPlayableMainSceneRectSpec.EntryDocumentPosition, FirstPlayableMainSceneRectSpec.EntryDocumentSize, theme.Paper, true, factory.Assets.MainPaperSprite ?? factory.Assets.MainPaperTextureSprite ?? factory.Assets.DocumentPaperSprite);
+            panel.GetComponent<Image>().preserveAspect = true;
             entryButton = panel.AddComponent<Button>();
             entryButton.targetGraphic = panel.GetComponent<Image>();
             theme.ApplyButton(entryButton, FirstPlayableButtonTone.Neutral);
@@ -380,16 +383,18 @@ namespace EpicProjectR.Presentation
             contractorImage.color = factory.Assets.MainContractorSprite != null ? Color.white : theme.Gold;
 
             reviewBellObject = factory.CreateAnchoredPanel(parent, "Review Inactive Bell", new Vector2(0f, 0f), new Vector2(0f, 0f), FirstPlayableMainSceneRectSpec.ReviewBellPosition, FirstPlayableMainSceneRectSpec.ReviewBellSize, Color.white, false, factory.Assets.MainBellSprite ?? factory.Assets.MainSmallButtonSprite);
+            reviewBellObject.GetComponent<Image>().preserveAspect = true;
             reviewBellCanvasGroup = reviewBellObject.AddComponent<CanvasGroup>();
             reviewBellCanvasGroup.alpha = 0.42f;
 
             reviewDocumentObject = factory.CreateAnchoredPanel(parent, "Presented Review Document", new Vector2(0f, 0f), new Vector2(0f, 0f), FirstPlayableMainSceneRectSpec.ReviewDocumentPosition, FirstPlayableMainSceneRectSpec.ReviewDocumentSize, theme.Paper, true, factory.Assets.MainPaperSprite ?? factory.Assets.MainPaperTextureSprite ?? factory.Assets.DocumentPaperSprite);
+            reviewDocumentObject.GetComponent<Image>().preserveAspect = true;
             reviewDocumentButton = reviewDocumentObject.AddComponent<Button>();
             reviewDocumentButton.targetGraphic = reviewDocumentObject.GetComponent<Image>();
             theme.ApplyButton(reviewDocumentButton, FirstPlayableButtonTone.Neutral);
             reviewDocumentButton.onClick.AddListener(() => PresentedDocumentClicked?.Invoke());
 
-            var dialogue = factory.CreateAnchoredPanel(parent, "Dialogue Log Panel", new Vector2(0f, 1f), new Vector2(0f, 1f), FirstPlayableMainSceneRectSpec.DialogueOpenPosition, FirstPlayableMainSceneRectSpec.DialogueSize, theme.Paper, true, factory.Assets.MainPaperSprite ?? factory.Assets.MainSpeechBubbleSprite);
+            var dialogue = factory.CreateAnchoredPanel(parent, "Dialogue Log Panel", new Vector2(0f, 1f), new Vector2(0f, 1f), FirstPlayableMainSceneRectSpec.DialogueOpenPosition, FirstPlayableMainSceneRectSpec.DialogueSize, theme.Paper, true, factory.Assets.MainPaperTextureSprite ?? factory.Assets.MainSpeechBubbleSprite);
             dialogueRect = dialogue.GetComponent<RectTransform>();
             var button = dialogue.AddComponent<Button>();
             button.targetGraphic = dialogue.GetComponent<Image>();
@@ -483,7 +488,7 @@ namespace EpicProjectR.Presentation
 
         private void BuildDecisionBox(Transform parent)
         {
-            decisionBox = factory.CreateAnchoredPanel(parent, "Final Decision Paper Button", new Vector2(1f, 0f), new Vector2(1f, 0f), FirstPlayableMainSceneRectSpec.FinalDecisionBoxPosition, FirstPlayableMainSceneRectSpec.FinalDecisionBoxSize, theme.Paper, true, factory.Assets.MainPaperSprite ?? factory.Assets.MainPaperTextureSprite ?? factory.Assets.DocumentPaperSprite);
+            decisionBox = factory.CreateAnchoredPanel(parent, "Final Decision Paper Button", new Vector2(1f, 0f), new Vector2(1f, 0f), FirstPlayableMainSceneRectSpec.FinalDecisionBoxPosition, FirstPlayableMainSceneRectSpec.FinalDecisionBoxSize, theme.Paper, true, factory.Assets.MainPaperTextureSprite ?? factory.Assets.MainPaperSprite ?? factory.Assets.DocumentPaperSprite);
             decisionBoxButton = decisionBox.AddComponent<Button>();
             decisionBoxButton.targetGraphic = decisionBox.GetComponent<Image>();
             theme.ApplyButton(decisionBoxButton, FirstPlayableButtonTone.Neutral);
@@ -514,7 +519,7 @@ namespace EpicProjectR.Presentation
             drawerTitle.text = FirstPlayableKoreanText.DecisionDrawerTitle;
             drawerTitle.GetComponent<LayoutElement>().preferredHeight = 58;
 
-            var middlePaper = factory.CreatePanel(decisionDrawer.transform, "Decision Amounts", Color.white, true, factory.Assets.MainPaperSprite ?? factory.Assets.DocumentPaperSprite);
+            var middlePaper = factory.CreatePanel(decisionDrawer.transform, "Decision Amounts", Color.white, true, factory.Assets.MainPaperTextureSprite ?? factory.Assets.DocumentPaperSprite);
             middlePaper.AddComponent<LayoutElement>().preferredHeight = 150;
             var middleLayout = middlePaper.AddComponent<VerticalLayoutGroup>();
             middleLayout.padding = new RectOffset(16, 16, 18, 18);
@@ -584,7 +589,7 @@ namespace EpicProjectR.Presentation
         private void CreateRuleRow(Transform parent, FirstPlayableRuleRowState rowState)
         {
             var rule = rowState.Rule;
-            var row = factory.CreatePanel(parent, "Applicable Reason", theme.Paper, true, factory.Assets.MainPaperSprite ?? factory.Assets.DocumentPaperSprite);
+            var row = factory.CreatePanel(parent, "Applicable Reason", theme.Paper, true, factory.Assets.MainPaperTextureSprite ?? factory.Assets.DocumentPaperSprite);
             var rowElement = row.AddComponent<LayoutElement>();
             rowElement.minHeight = FirstPlayableMainSceneRectSpec.RuleRowHeight;
             rowElement.preferredHeight = FirstPlayableMainSceneRectSpec.RuleRowHeight;
@@ -685,13 +690,13 @@ namespace EpicProjectR.Presentation
             rowLayout.childForceExpandWidth = false;
             rowLayout.childForceExpandHeight = false;
             var rowElement = row.AddComponent<LayoutElement>();
-            rowElement.minHeight = 54f;
+            rowElement.minHeight = 76f;
 
             var bubble = factory.CreatePanel(row.transform, "Dialogue Bubble", Color.white, true, factory.Assets.MainSpeechBubbleSprite ?? factory.Assets.MainPaperSprite);
             var bubbleElement = bubble.AddComponent<LayoutElement>();
             bubbleElement.minWidth = 180f;
             bubbleElement.preferredWidth = 500f;
-            bubbleElement.minHeight = 54f;
+            bubbleElement.minHeight = 76f;
             var bubbleLayout = bubble.AddComponent<VerticalLayoutGroup>();
             bubbleLayout.padding = new RectOffset(16, 16, 10, 10);
             bubbleLayout.childForceExpandWidth = true;
@@ -699,7 +704,7 @@ namespace EpicProjectR.Presentation
 
             var text = factory.CreateText(bubble.transform, "Message", theme.BodyFont, 17, FontStyle.Bold, theme.Ink, TextAnchor.UpperLeft);
             text.text = line;
-            text.GetComponent<LayoutElement>().preferredHeight = 46f;
+            text.GetComponent<LayoutElement>().preferredHeight = 54f;
 
             Canvas.ForceUpdateCanvases();
             if (dialogueScroll != null)

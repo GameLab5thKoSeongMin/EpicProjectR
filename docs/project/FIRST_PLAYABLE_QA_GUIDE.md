@@ -145,13 +145,24 @@ Use this in the next manual visual QA pass:
 - Confirm after approve/reject, the contractor exits, the document disappears, and the next contract waits for another bell click.
 - Confirm source IDs remain exact internally but are not displayed in normal document/rule labels.
 
+## M8.14 Main Asset Fidelity QA Addendum
+
+- Confirm all MainSceneUI visuals load from `Resources` without a repository-level `using_image` dependency.
+- Confirm the first paper and bell match Main's measured `102x75` and `120x120` proportions and positions.
+- Confirm the HUD office title is fully visible at the upper left.
+- Confirm the physical trapezoid paper prop is used for presented documents, while broad UI surfaces use the rectangular paper texture.
+- Confirm reason rows are readable in normal and selected states.
+- Confirm the decision amount area is rectangular paper and does not display the stretched paper-prop silhouette.
+- Run `EpicProjectR.Tests.M8_14PlayModeCapture.Run` from Unity command line or an editor invocation to regenerate the C001-C003 screenshot sequence.
+- Treat the current automated 1280 request as unverified until a fixed Game View preset produces a true 1280x720 PNG.
+
 ## M8.18 1920x1080 Correction QA Addendum
 
-- Confirm the first screen uses `using_image/배경화면.png` and no longer appears overly dark.
+- Confirm the first screen uses the imported Main background from build-safe Resources and no longer appears overly dark.
 - Confirm the top HUD title is not clipped, the date is visually centered, and ducats/reputation are cleanly right-aligned at 1920x1080.
 - Confirm the contractor arrives from the center-bottom of the Main screen, then settles into the left-side visible position.
 - Confirm the review layout reads as left chat/character area, largest center workstation, and narrow right reason/decision panel.
 - Confirm the chat panel scrolls with the mouse wheel and still appends one small bubble at a time when clicked.
 - Confirm right-panel reason rows fit within the panel and show only applicable reason text, not source IDs.
-- Confirm the decision paper opens upward and closes downward when `?몄닔 寃곗젙?? is clicked again.
+- Confirm the decision paper opens upward and closes downward when `인수 결정서` is clicked again.
 - Confirm rapid open/close clicks do not leave the decision paper hidden while the presenter is in decision-open mode.

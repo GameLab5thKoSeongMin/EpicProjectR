@@ -31,7 +31,7 @@ namespace EpicProjectR.Presentation
             var image = panel.AddComponent<Image>();
             image.color = color;
             image.sprite = sprite;
-            image.type = sprite != null ? Image.Type.Simple : Image.Type.Simple;
+            image.type = Image.Type.Simple;
 
             if (outlined)
             {

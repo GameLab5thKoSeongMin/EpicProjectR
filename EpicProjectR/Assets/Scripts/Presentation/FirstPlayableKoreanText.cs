@@ -20,7 +20,8 @@ namespace EpicProjectR.Presentation
         public const string NextContractButton = "다음 계약";
         public const string FinishButton = "종료";
         public const string EntryDocumentTitle = "심사 서류 도착";
-        public const string EntryPrompt = "종을 울리거나 서류를 눌러 다음 신청인을 맞이하세요.";
+        public const string EntryPrompt = "종을 울려 다음 신청인을 맞이하세요.";
+        public const string DocumentPresentedPrompt = "제시된 서류를 눌러 심사를 시작하세요.";
         public const string DialogueReviewIntro = "신청인이 도착했습니다. 서류를 살피고 AR/CR 사유를 표시하세요.";
         public const string DecisionBoxTitle = "인수 결정서";
         public const string DecisionBoxPrompt = "판단서를 올려 결정을 제출합니다.";
@@ -35,9 +36,9 @@ namespace EpicProjectR.Presentation
         public const string ReviewWaitingOutcome = "계약 결과: 아직 제출된 결정이 없습니다.";
         public const string ReviewWaitingSettlement = "정산: 아직 정산 항목이 없습니다.";
         public const string CompletePremium = "첫 플레이어블 심사 루프 완료.";
-        public const string CompleteResult = "완료된 순서: C001, C002, C003.";
-        public const string CompleteOutcome = "C003 사고 결과는 종료 전 결과 화면에서 확인할 수 있습니다.";
-        public const string CompleteSettlement = "fixture 순서를 다시 보려면 Play Mode를 다시 시작하세요.";
+        public const string CompleteResult = "세 건의 심사가 모두 완료되었습니다.";
+        public const string CompleteOutcome = "마지막 계약 결과까지 심사 처리에 반영되었습니다.";
+        public const string CompleteSettlement = "심사 루프를 다시 시작하려면 Play Mode를 다시 시작하세요.";
 
         public static string HeaderMeta(TurnNumber turn, GameDate date, ContractId contractId, string status)
         {
@@ -46,7 +47,7 @@ namespace EpicProjectR.Presentation
 
         public static string CompleteHeader()
         {
-            return "턴 1  |  날짜 1599-01-15  |  fixture 세션 완료";
+            return "턴 1  |  날짜 1599-01-15  |  첫 심사 세션 완료";
         }
 
         public static string HudDate(GameDate date)
